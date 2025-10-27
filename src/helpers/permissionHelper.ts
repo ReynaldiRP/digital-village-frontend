@@ -1,7 +1,7 @@
-import {useAuthStore} from '@/stores/authStore';
+import { useAuthStore } from '@/stores/auth'
 
 export const can = (permission: string): boolean => {
-  const authStore = useAuthStore();
-  const userPermissions = authStore.user?.getUserPermissions ?? [];
-  return userPermissions.includes(permission);
+  const authStore = useAuthStore()
+  const userPermissions = authStore.user?.permissions ?? []
+  return userPermissions.includes(permission)
 }

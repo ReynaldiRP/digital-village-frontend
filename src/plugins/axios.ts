@@ -1,10 +1,10 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const token = Cookies.get('token')
+const token = Cookies.get('auth_token')
 
 const axiosInstance = axios.create({
-  baseURL: 'https://localhost8000/api',
+  baseURL: 'http://localhost:8000/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'multipart/form-data',
@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = Cookies.get('token')
+  const token = Cookies.get('auth_token')
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
   }

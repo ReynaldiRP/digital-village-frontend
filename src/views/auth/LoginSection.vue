@@ -1,5 +1,8 @@
 <template>
-  <form action="#" class="flex flex-1 items-center pl-[calc(((100%-1280px)/2)+75px)]">
+  <form
+    @submit.prevent="handleLogin"
+    class="flex flex-1 items-center pl-[calc(((100%-1280px)/2)+75px)]"
+  >
     <div class="rounded-3xl bg-white flex h-fit w-[486px] shrink-0 flex-col gap-[32px] p-[32px]">
       <header class="flex flex-col items-center gap-[32px]">
         <img
@@ -15,8 +18,8 @@
             Silahkan masuk untuk melanjutkan
           </p>
         </div>
-        <div class="bg-red-100 rounded-lg p-4 w-full">
-          <p class="font-medium leading-5 text-red-700">Error Section</p>
+        <div v-if="Object.keys(auth.errors).length" class="bg-red-100 rounded-lg p-4 w-full">
+          <p class="font-medium leading-5 text-red-700">{{ auth.errors.message }}</p>
         </div>
       </header>
       <section id="Select" class="gap-6 grid grid-cols-2">
@@ -134,12 +137,19 @@ import EmailIcon from '@/assets/images/icons/user-secondary-green.svg'
 import EmailFilledIcon from '@/assets/images/icons/user-black.svg'
 import PasswordIcon from '@/assets/images/icons/key-secondary-green.svg'
 import PasswordFilledIcon from '@/assets/images/icons/key-black.svg'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
 
 const form = reactive({
   role: '',
   email: '',
   password: '',
 })
+
+const handleLogin = (): void => {
+  auth.login(form)
+}
 </script>
 
 <style scoped></style>
