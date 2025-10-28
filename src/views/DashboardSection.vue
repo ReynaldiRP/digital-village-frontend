@@ -27,104 +27,14 @@
         </a>
       </div>
       <section id="Statistics" class="grid grid-cols-2 flex-1 shrink-0 gap-[14px]">
-        <div class="card flex flex-col w-full rounded-2xl p-6 gap-3 bg-white">
-          <div class="flex items-center justify-between">
-            <p class="font-medium text-desa-secondary">Jumlah Penduduk</p>
-            <img
-              src="@/assets/images/icons/profil-2user-foreshadow-background.svg"
-              class="flex size-12 shrink-0"
-              alt="icon"
-            />
-          </div>
-          <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold text-[32px] leading-10">{{ dashboardData?.residents }}</p>
-            <div class="flex items-center gap-0.5">
-              <img
-                src="@/assets/images/icons/trend-up-dark-green-fill.svg"
-                class="flex size-[18px] shrink-0"
-                alt="icon"
-              />
-              <p class="font-medium text-sm text-desa-secondary">
-                <span class="text-desa-dark-green">+12%</span>
-                dari bulan sebelumnya
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="card flex flex-col w-full rounded-2xl p-6 gap-3 bg-white">
-          <div class="flex items-center justify-between">
-            <p class="font-medium text-desa-secondary">Pembangunan</p>
-            <img
-              src="@/assets/images/icons/buildings-foreshadow-background.svg"
-              class="flex size-12 shrink-0"
-              alt="icon"
-            />
-          </div>
-          <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold text-[32px] leading-10">{{ dashboardData?.developments }}</p>
-            <div class="flex items-center gap-0.5">
-              <img
-                src="@/assets/images/icons/trend-up-dark-green-fill.svg"
-                class="flex size-[18px] shrink-0"
-                alt="icon"
-              />
-              <p class="font-medium text-sm text-desa-secondary">
-                <span class="text-desa-dark-green">+12%</span>
-                dari bulan sebelumnya
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="card flex flex-col w-full rounded-2xl p-6 gap-3 bg-white">
-          <div class="flex items-center justify-between">
-            <p class="font-medium text-desa-secondary">Kepala Rumah</p>
-            <img
-              src="@/assets/images/icons/crown-foreshadow-background.svg"
-              class="flex size-12 shrink-0"
-              alt="icon"
-            />
-          </div>
-          <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold text-[32px] leading-10">
-              {{ dashboardData?.head_of_families }}
-            </p>
-            <div class="flex items-center gap-0.5">
-              <img
-                src="@/assets/images/icons/trend-up-dark-green-fill.svg"
-                class="flex size-[18px] shrink-0"
-                alt="icon"
-              />
-              <p class="font-medium text-sm text-desa-secondary">
-                <span class="text-desa-dark-green">+12%</span>
-                dari bulan sebelumnya
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="card flex flex-col w-full rounded-2xl p-6 gap-3 bg-white">
-          <div class="flex items-center justify-between">
-            <p class="font-medium text-desa-secondary">Total Events</p>
-            <img
-              src="@/assets/images/icons/calendar-2-foreshadow-background.svg"
-              class="flex size-12 shrink-0"
-              alt="icon"
-            />
-          </div>
-          <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold text-[32px] leading-10">{{ dashboardData?.events }}</p>
-            <div class="flex items-center gap-0.5">
-              <img
-                src="@/assets/images/icons/trend-up-dark-green-fill.svg"
-                class="flex size-[18px] shrink-0"
-                alt="icon"
-              />
-              <p class="font-medium text-sm text-desa-secondary">
-                <span class="text-desa-dark-green">+12%</span>
-                dari bulan sebelumnya
-              </p>
-            </div>
-          </div>
-        </div>
+        <template v-for="statistic in statistics" :key="statistic.id">
+          <CardStatistic
+            :label="statistic.label"
+            :value="statistic.value"
+            :icon="statistic.icon"
+            :trend-icon="TrendUpIcon"
+          />
+        </template>
       </section>
     </div>
     <div id="Row-2" class="flex gap-[14px]">
@@ -132,32 +42,13 @@
         id="Bantuan-Sosial"
         class="flex flex-col w-[calc(497/1000*100%)] shrink-0 rounded-2xl bg-white"
       >
-        <div class="flex flex-col gap-3 p-6">
-          <div class="flex items-center justify-between">
-            <p class="font-medium text-desa-secondary">Bantuan Sosial</p>
-            <img
-              src="@/assets/images/icons/bag-2-foreshadow-background.svg"
-              class="flex size-12 shrink-0"
-              alt="icon"
-            />
-          </div>
-          <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold text-[32px] leading-10">
-              {{ dashboardData?.social_assistances }}
-            </p>
-            <div class="flex items-center gap-0.5">
-              <img
-                src="@/assets/images/icons/trend-up-dark-green-fill.svg"
-                class="flex size-[18px] shrink-0"
-                alt="icon"
-              />
-              <p class="font-medium text-sm text-desa-secondary">
-                <span class="text-desa-dark-green">+12%</span>
-                dari bulan sebelumnya
-              </p>
-            </div>
-          </div>
-        </div>
+        <CardStatistic
+          label="Bantuan Sosial"
+          :value="dashboardData?.social_assistances || 0"
+          :icon="Bag2ForeshadowBackgroundIcon"
+          :trend-icon="TrendUpIcon"
+          variant="plain"
+        />
         <hr class="border-desa-foreshadow" />
         <div class="flex flex-col gap-4 p-6">
           <p class="font-semibold text-[20px] leading-[25px] text-left w-full">Bansos Terakhir</p>
@@ -396,7 +287,10 @@
             <p class="font-semibold text-[20px] leading-[25px] text-left w-full">
               Applicant Terakhir
             </p>
-            <template v-for="recentDevelopmentApplicant in recentDevelopmentApplicantData" :key="recentDevelopmentApplicant.id">
+            <template
+              v-for="recentDevelopmentApplicant in recentDevelopmentApplicantData"
+              :key="recentDevelopmentApplicant.id"
+            >
               <div class="card flex items-center w-full gap-3">
                 <div
                   class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow overflow-hidden"
@@ -416,7 +310,9 @@
                         alt="icon"
                       />
                     </div>
-                    <p class="font-medium text-xl leading-[22.5px] line-clamp-1">{{ recentDevelopmentApplicant.applicant_name }}</p>
+                    <p class="font-medium text-xl leading-[22.5px] line-clamp-1">
+                      {{ recentDevelopmentApplicant.applicant_name }}
+                    </p>
                   </div>
                   <span class="font-medium text-desa-secondary line-clamp-1">
                     Melamar {{ recentDevelopmentApplicant.project_name }}
@@ -425,83 +321,13 @@
                 <div
                   class="badge rounded-full p-3 gap-2 flex w-[100px] justify-center shrink-0 bg-desa-yellow"
                 >
-                  <span class="font-semibold text-xs text-white uppercase">{{ recentDevelopmentApplicant.status }}</span>
+                  <span class="font-semibold text-xs text-white uppercase">{{
+                    recentDevelopmentApplicant.status
+                  }}</span>
                 </div>
               </div>
               <hr class="border-desa-foreshadow last-of-type:hidden" />
             </template>
-            <!-- <div class="card flex items-center w-full gap-3">
-              <div class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow overflow-hidden">
-                <img
-                  src="@/assets/images/thumbnails/kd-applicant-2.png"
-                  class="w-full h-full object-cover"
-                  alt="icon"
-                />
-              </div>
-              <div class="flex flex-col gap-[6px] w-full">
-                <div class="flex items-center gap-[6px]">
-                  <div class="flex size-8 rounded-full overflow-hidden bg-desa-foreshadow">
-                    <img
-                      src="@/assets/images/photos/kk-photo-2.png"
-                      class="w-full h-full object-cover"
-                      alt="icon"
-                    />
-                  </div>
-                  <p class="font-medium text-xl leading-[22.5px] line-clamp-1">Surti Jasmine</p>
-                </div>
-                <span class="font-medium text-desa-secondary line-clamp-1">
-                  Melamar pembangunan Balai Desa
-                </span>
-              </div>
-              <div
-                class="badge rounded-full p-3 gap-2 flex w-[100px] justify-center shrink-0 bg-desa-dark-green"
-              >
-                <span class="font-semibold text-xs text-white uppercase">Diterima</span>
-              </div>
-            </div>
-            <hr class="border-desa-foreshadow last-of-type:hidden" />
-            <div class="card flex items-center w-full gap-3">
-              <div class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow overflow-hidden">
-                <img
-                  src="@/assets/images/thumbnails/kd-applicant-3.png"
-                  class="w-full h-full object-cover"
-                  alt="icon"
-                />
-              </div>
-              <div class="flex flex-col gap-[6px] w-full">
-                <div class="flex items-center gap-[6px]">
-                  <div class="flex size-8 rounded-full overflow-hidden bg-desa-foreshadow">
-                    <img
-                      src="@/assets/images/photos/kk-photo-3.png"
-                      class="w-full h-full object-cover"
-                      alt="icon"
-                    />
-                  </div>
-                  <p class="font-medium text-xl leading-[22.5px] line-clamp-1">Mirna Wonongso</p>
-                </div>
-                <span class="font-medium text-desa-secondary line-clamp-1">
-                  Melamar pembangunan Puskemas Desa
-                </span>
-              </div>
-              <div
-                class="badge rounded-full p-3 gap-2 flex w-[100px] justify-center shrink-0 bg-desa-orange"
-              >
-                <span class="font-semibold text-xs text-white uppercase">Ditolak</span>
-              </div>
-            </div>
-            <hr class="border-desa-foreshadow last-of-type:hidden" />
-            <div
-              class="hidden m-auto h-[280px] flex flex-col shrink-0 justify-center items-center gap-6"
-            >
-              <img
-                src="@/assets/images/icons/note-remove-secondary.svg"
-                class="flex size-[52px] shrink-0"
-                alt="icon"
-              />
-              <p class="font-medium leading-5 text-center text-desa-secondary">
-                Ups, nampaknya belum ada Applicant
-              </p>
-            </div> -->
           </div>
         </div>
         <div
@@ -622,8 +448,15 @@
 import { useDashboardStore } from '@/stores/dashboard'
 import { ArcElement, Chart, DoughnutController, Legend, Tooltip } from 'chart.js'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
-import { parseRupiah, formatRupiah } from '@/helpers/format'
+import { computed, onMounted } from 'vue'
+import { formatRupiah } from '@/helpers/format'
+import CardStatistic from '@/components/dashboard/home/CardStatistic.vue'
+import Profil2userForeshadowBackgroundIcon from '@/assets/images/icons/profil-2user-foreshadow-background.svg'
+import CrownForeshadowBackgroundIcon from '@/assets/images/icons/crown-foreshadow-background.svg'
+import Calendar2ForeshadowBackgroundIcon from '@/assets/images/icons/calendar-2-foreshadow-background.svg'
+import TrendUpIcon from '@/assets/images/icons/trend-up-dark-green-fill.svg'
+import BuildingForeshadowBackgroundIcon from '@/assets/images/icons/building-foreshadow-background.svg'
+import Bag2ForeshadowBackgroundIcon from '@/assets/images/icons/bag-2-foreshadow-background.svg'
 
 const dashboardStore = useDashboardStore()
 const { loading, dashboardData, recentSocialAssistanceData, recentDevelopmentApplicantData } =
@@ -679,6 +512,33 @@ type BadgeStatus = keyof typeof badgeStatusColors
 const getBadgeStatusColor = (status: string) => {
   return badgeStatusColors[status.toLowerCase() as BadgeStatus] || 'bg-desa-gray'
 }
+
+const statistics = computed(() => [
+  {
+    id: 1,
+    label: 'Jumlah Penduduk',
+    value: dashboardData.value?.residents ?? 0,
+    icon: Profil2userForeshadowBackgroundIcon,
+  },
+  {
+    id: 2,
+    label: 'Pembangunan',
+    value: dashboardData.value?.developments ?? 0,
+    icon: BuildingForeshadowBackgroundIcon,
+  },
+  {
+    id: 3,
+    label: 'Kepala Rumah',
+    value: dashboardData.value?.head_of_families ?? 0,
+    icon: CrownForeshadowBackgroundIcon,
+  },
+  {
+    id: 4,
+    label: 'Total Events',
+    value: dashboardData.value?.events ?? 0,
+    icon: Calendar2ForeshadowBackgroundIcon,
+  },
+])
 </script>
 
 <style scoped></style>
