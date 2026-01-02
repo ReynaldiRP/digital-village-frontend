@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import Cookies from 'js-cookie'
 import router from '@/router'
 import { handleError } from '@/helpers/errorHelper'
+import axios from 'axios'
 
 export const useAuthStore = defineStore('user', () => {
   const loading = ref(false)
@@ -21,8 +22,17 @@ export const useAuthStore = defineStore('user', () => {
       Cookies.set('auth_token', token.value)
       success.value = response.data.message
       router.push({ name: 'dashboard' })
-    } catch (error) {
-      errors.value = { message: handleError(error.response) }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+
       console.log(errors.value)
     } finally {
       loading.value = false
@@ -38,8 +48,16 @@ export const useAuthStore = defineStore('user', () => {
       user.value = null
       success.value = 'Logout successful'
       router.push({ name: 'login' })
-    } catch (error) {
-      errors.value = { message: handleError(error.response) }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
       console.log(errors.value)
     } finally {
       loading.value = false
@@ -52,8 +70,8 @@ export const useAuthStore = defineStore('user', () => {
       const response = await axiosInstance.get<checkAuthResponse>('/me')
       user.value = response.data.user
       return user.value
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
         await logout()
       }
       return null

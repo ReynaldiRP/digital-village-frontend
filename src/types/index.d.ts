@@ -8,10 +8,3 @@ export interface SidebarItem {
   link: string
   children?: SidebarItem[]
 }
-
-export interface ErrorResponse {
-  status: number
-  data: {
-    message: string
-  }
-}

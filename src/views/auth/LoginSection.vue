@@ -125,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import Input from '@/components/ui/Input.vue'
+import Input from '@/components/ui/BaseInput.vue'
 import { reactive } from 'vue'
 
 import EmailIcon from '@/assets/images/icons/user-secondary-green.svg'
@@ -133,8 +133,7 @@ import EmailFilledIcon from '@/assets/images/icons/user-black.svg'
 import PasswordIcon from '@/assets/images/icons/key-secondary-green.svg'
 import PasswordFilledIcon from '@/assets/images/icons/key-black.svg'
 import { useAuthStore } from '@/stores/auth'
-import Button from '@/components/ui/Button.vue'
-
+import Button from '@/components/ui/BaseButton.vue'
 const auth = useAuthStore()
 
 const form = reactive({
