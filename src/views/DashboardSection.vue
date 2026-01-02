@@ -50,49 +50,13 @@
           variant="plain"
         />
         <hr class="border-desa-foreshadow" />
-        <div class="flex flex-col gap-4 p-6">
-          <p class="font-semibold text-[20px] leading-[25px] text-left w-full">Bansos Terakhir</p>
-          <template
+        <RecentListSection title="Bansos Terakhir">
+          <RecentSocialAssistanceItem
             v-for="recentSocialAssistance in recentSocialAssistanceData"
             :key="recentSocialAssistance.id"
-          >
-            <div class="card flex items-center w-full gap-3">
-              <div
-                class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-              >
-                <img
-                  src="@/assets/images/icons/money-dark-green.svg"
-                  class="flex size-9 shrink-0"
-                  alt="icon"
-                />
-              </div>
-              <div class="flex flex-col gap-[6px] w-full">
-                <p class="font-semibold text-xl leading-[25px]">
-                  Rp.{{ formatRupiah(recentSocialAssistance.amount) }}
-                </p>
-                <div class="flex items-center gap-0.5 font-medium text-desa-secondary">
-                  <img
-                    src="@/assets/images/icons/profile-secondary-green.svg"
-                    class="flex size-[18px] shrink-0"
-                    alt="icon"
-                  />
-                  <span class="line-clamp-1">
-                    Diberikan oleh {{ recentSocialAssistance.recipient_name }}
-                  </span>
-                </div>
-              </div>
-              <div
-                class="badge rounded-full p-3 gap-2 flex w-[100px] justify-center shrink-0"
-                :class="getBadgeStatusColor(recentSocialAssistance.status)"
-              >
-                <span class="font-semibold text-xs text-white uppercase">{{
-                  recentSocialAssistance.status
-                }}</span>
-              </div>
-            </div>
-            <hr class="border-desa-foreshadow last-of-type:hidden" />
-          </template>
-        </div>
+            :data="recentSocialAssistance"
+          />
+        </RecentListSection>
       </section>
       <section id="Event" class="flex flex-col flex-1 shrink-0 rounded-2xl bg-white">
         <div id="Date-Picker" class="flex flex-col gap-4 p-6">
@@ -283,52 +247,13 @@
             </div>
           </div>
           <hr class="border-desa-foreshadow" />
-          <div class="flex flex-col gap-4 p-6">
-            <p class="font-semibold text-[20px] leading-[25px] text-left w-full">
-              Applicant Terakhir
-            </p>
-            <template
+          <RecentListSection title="Applicant Terakhir">
+            <RecentDevelopmentApplicantItem
               v-for="recentDevelopmentApplicant in recentDevelopmentApplicantData"
               :key="recentDevelopmentApplicant.id"
-            >
-              <div class="card flex items-center w-full gap-3">
-                <div
-                  class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow overflow-hidden"
-                >
-                  <img
-                    src="@/assets/images/thumbnails/kd-applicant-1.png"
-                    class="w-full h-full object-cover"
-                    alt="icon"
-                  />
-                </div>
-                <div class="flex flex-col gap-[6px] w-full">
-                  <div class="flex items-center gap-[6px]">
-                    <div class="flex size-8 rounded-full overflow-hidden bg-desa-foreshadow">
-                      <img
-                        src="@/assets/images/photos/kk-photo-1.png"
-                        class="w-full h-full object-cover"
-                        alt="icon"
-                      />
-                    </div>
-                    <p class="font-medium text-xl leading-[22.5px] line-clamp-1">
-                      {{ recentDevelopmentApplicant.applicant_name }}
-                    </p>
-                  </div>
-                  <span class="font-medium text-desa-secondary line-clamp-1">
-                    Melamar {{ recentDevelopmentApplicant.project_name }}
-                  </span>
-                </div>
-                <div
-                  class="badge rounded-full p-3 gap-2 flex w-[100px] justify-center shrink-0 bg-desa-yellow"
-                >
-                  <span class="font-semibold text-xs text-white uppercase">{{
-                    recentDevelopmentApplicant.status
-                  }}</span>
-                </div>
-              </div>
-              <hr class="border-desa-foreshadow last-of-type:hidden" />
-            </template>
-          </div>
+              :data="recentDevelopmentApplicant"
+            />
+          </RecentListSection>
         </div>
         <div
           class="flex items-center justify-between h-[125px] rounded-2xl p-8 gap-4 gradient-horizontal"
@@ -449,7 +374,6 @@ import { useDashboardStore } from '@/stores/dashboard'
 import { ArcElement, Chart, DoughnutController, Legend, Tooltip } from 'chart.js'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted } from 'vue'
-import { formatRupiah } from '@/helpers/format'
 import CardStatistic from '@/components/dashboard/home/CardStatistic.vue'
 import Profil2userForeshadowBackgroundIcon from '@/assets/images/icons/profil-2user-foreshadow-background.svg'
 import CrownForeshadowBackgroundIcon from '@/assets/images/icons/crown-foreshadow-background.svg'
@@ -457,6 +381,9 @@ import Calendar2ForeshadowBackgroundIcon from '@/assets/images/icons/calendar-2-
 import TrendUpIcon from '@/assets/images/icons/trend-up-dark-green-fill.svg'
 import BuildingForeshadowBackgroundIcon from '@/assets/images/icons/building-foreshadow-background.svg'
 import Bag2ForeshadowBackgroundIcon from '@/assets/images/icons/bag-2-foreshadow-background.svg'
+import RecentListSection from '@/components/dashboard/home/RecentListSection.vue'
+import RecentSocialAssistanceItem from '@/components/dashboard/home/RecentSocialAssistanceItem.vue'
+import RecentDevelopmentApplicantItem from '@/components/dashboard/home/RecentDevelopmentApplicantItem.vue'
 
 const dashboardStore = useDashboardStore()
 const { loading, dashboardData, recentSocialAssistanceData, recentDevelopmentApplicantData } =
@@ -469,7 +396,6 @@ onMounted(async () => {
   await fetchRecentSocialAssistance()
   await fetchRecentDevelopmentApplicants()
 
-  console.log(recentDevelopmentApplicantData.value)
 
   getResidentsStatistic()
 })
@@ -499,18 +425,6 @@ const getResidentsStatistic = () => {
       cutout: '69%',
     },
   })
-}
-
-const badgeStatusColors = {
-  approved: 'bg-desa-dark-green',
-  pending: 'bg-desa-yellow',
-  rejected: 'bg-desa-orange',
-}
-
-type BadgeStatus = keyof typeof badgeStatusColors
-
-const getBadgeStatusColor = (status: string) => {
-  return badgeStatusColors[status.toLowerCase() as BadgeStatus] || 'bg-desa-gray'
 }
 
 const statistics = computed(() => [

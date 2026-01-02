@@ -108,12 +108,7 @@
           />
         </div>
       </section>
-      <button
-        type="submit"
-        class="bg-desa-dark-green rounded-2xl font-medium leading-5 text-white flex items-center justify-center py-[18px]"
-      >
-        Masuk
-      </button>
+      <Button type="submit" :loading="auth.loading" label="Masuk" />
     </div>
   </form>
   <section id="Banner" class="relative flex w-full max-w-[634px]">
@@ -138,6 +133,7 @@ import EmailFilledIcon from '@/assets/images/icons/user-black.svg'
 import PasswordIcon from '@/assets/images/icons/key-secondary-green.svg'
 import PasswordFilledIcon from '@/assets/images/icons/key-black.svg'
 import { useAuthStore } from '@/stores/auth'
+import Button from '@/components/ui/Button.vue'
 
 const auth = useAuthStore()
 
