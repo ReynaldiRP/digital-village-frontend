@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import Input from '@/components/ui/BaseInput.vue'
-import { reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
 
 import EmailIcon from '@/assets/images/icons/user-secondary-green.svg'
 import EmailFilledIcon from '@/assets/images/icons/user-black.svg'
@@ -134,7 +134,14 @@ import PasswordIcon from '@/assets/images/icons/key-secondary-green.svg'
 import PasswordFilledIcon from '@/assets/images/icons/key-black.svg'
 import { useAuthStore } from '@/stores/auth'
 import Button from '@/components/ui/BaseButton.vue'
+import { toast } from 'vue3-toastify'
 const auth = useAuthStore()
+
+onMounted(() => {
+  if (auth.success && auth.success.length) {
+    toast.success(auth.success)
+  }
+})
 
 const form = reactive({
   role: '',

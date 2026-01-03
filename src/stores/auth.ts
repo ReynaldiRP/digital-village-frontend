@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('user', () => {
       token.value = response.data.token
       Cookies.set('auth_token', token.value)
       success.value = response.data.message
-      router.push({ name: 'dashboard' })
+      await router.push({ name: 'dashboard' })
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('user', () => {
       Cookies.remove('auth_token')
       user.value = null
       success.value = 'Logout successful'
-      router.push({ name: 'login' })
+      await router.push({ name: 'login' })
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {

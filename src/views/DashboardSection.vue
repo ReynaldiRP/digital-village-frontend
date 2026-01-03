@@ -384,19 +384,25 @@ import Bag2ForeshadowBackgroundIcon from '@/assets/images/icons/bag-2-foreshadow
 import RecentListSection from '@/components/dashboard/home/RecentListSection.vue'
 import RecentSocialAssistanceItem from '@/components/dashboard/home/RecentSocialAssistanceItem.vue'
 import RecentDevelopmentApplicantItem from '@/components/dashboard/home/RecentDevelopmentApplicantItem.vue'
+import { useAuthStore } from '@/stores/auth'
+import { toast } from 'vue3-toastify'
+
+const auth = useAuthStore()
 
 const dashboardStore = useDashboardStore()
-const { loading, dashboardData, recentSocialAssistanceData, recentDevelopmentApplicantData } =
+const { dashboardData, recentSocialAssistanceData, recentDevelopmentApplicantData } =
   storeToRefs(dashboardStore)
 const { fetchDashboardData, fetchRecentSocialAssistance, fetchRecentDevelopmentApplicants } =
   dashboardStore
 
 onMounted(async () => {
+  if (auth.success && auth.success.length) {
+    toast.success(auth.success)
+  }
+
   await fetchDashboardData()
   await fetchRecentSocialAssistance()
   await fetchRecentDevelopmentApplicants()
-
-
   getResidentsStatistic()
 })
 
