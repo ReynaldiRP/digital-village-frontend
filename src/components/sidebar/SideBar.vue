@@ -85,7 +85,7 @@ const sidebarItems: SidebarItemType[] = [
       active: crownDarkGreen,
       inactive: crownSecondaryGreen,
     },
-    link: '/kepala-rumah', // Update to use Vue Router path
+    link: '/head-of-family', // Update to use Vue Router path
   },
   {
     id: 3,

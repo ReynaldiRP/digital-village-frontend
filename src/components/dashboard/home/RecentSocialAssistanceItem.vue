@@ -47,7 +47,7 @@ const formatRupiah = (value: number) => {
 
 const getBadgeStatusColor = (status: string) => {
   const colors: Record<string, string> = {
-    accepted: 'bg-desa-dark-green',
+    approved: 'bg-desa-dark-green',
     pending: 'bg-desa-yellow',
     rejected: 'bg-desa-orange',
   }

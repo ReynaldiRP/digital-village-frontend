@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import LoginSection from '@/views/auth/LoginSection.vue'
 import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
+import IndexSection from '@/views/head-of-family/IndexSection.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 declare module 'vue-router' {
@@ -26,6 +27,12 @@ const router = createRouter({
           name: 'dashboard',
           component: DashboardSection,
           meta: { requiresAuth: true, permission: 'dashboard-menu' },
+        },
+        {
+          path: 'head-of-family',
+          name: 'head-of-family',
+          component: () => IndexSection,
+          meta: { requiresAuth: true, permission: 'head-of-family-menu' },
         },
       ],
     },

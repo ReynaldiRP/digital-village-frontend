@@ -59,111 +59,7 @@
         </RecentListSection>
       </section>
       <section id="Event" class="flex flex-col flex-1 shrink-0 rounded-2xl bg-white">
-        <div id="Date-Picker" class="flex flex-col gap-4 p-6">
-          <div class="flex items-center justify-between">
-            <button
-              class="flex items-center justify-center size-14 rounded-2xl border border-desa-foreshadow hover:border-desa-dark-green"
-            >
-              <img
-                src="@/assets/images/icons/arrow-left-secondary-green.svg"
-                class="flex size-6 shrink-0"
-                alt="icon"
-              />
-            </button>
-            <p class="font-semibold text-xl">December 2024</p>
-            <button
-              class="flex items-center justify-center size-14 rounded-2xl border border-desa-foreshadow hover:border-desa-dark-green"
-            >
-              <img
-                src="@/assets/images/icons/arrow-left-secondary-green.svg"
-                class="flex size-6 shrink-0 rotate-180"
-                alt="icon"
-              />
-            </button>
-          </div>
-          <div class="flex justify-between">
-            <button class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3">
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white">
-                  28
-                </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Sen
-              </span>
-            </button>
-            <button class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3">
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white">
-                  29
-                </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Sel
-              </span>
-            </button>
-            <button class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3">
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white">
-                  30
-                </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Rab
-              </span>
-            </button>
-            <button
-              class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3 active"
-            >
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white">
-                  31
-                </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Kam
-              </span>
-            </button>
-            <button class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3">
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white"> 1 </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Jum
-              </span>
-            </button>
-            <button class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3">
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white"> 2 </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Sab
-              </span>
-            </button>
-            <button class="group flex flex-col items-center w-[46px] h-[76px] shrink-0 gap-3">
-              <div
-                class="flex rounded-full size-[46px] items-center justify-center bg-desa-foreshadow group-[.active]:bg-desa-soft-green"
-              >
-                <span class="font-medium text-desa-dark-green group-[.active]:text-white"> 3 </span>
-              </div>
-              <span class="font-medium text-sm text-desa-secondary group-[.active]:text-desa-black">
-                Min
-              </span>
-            </button>
-          </div>
-        </div>
+        <DatePicker @date-selected="handleDateSelected" />
         <div id="Events" class="flex flex-col flex-1 gap-4 p-6">
           <div class="flex items-center justify-between">
             <button>
@@ -373,8 +269,9 @@
 import { useDashboardStore } from '@/stores/dashboard'
 import { ArcElement, Chart, DoughnutController, Legend, Tooltip } from 'chart.js'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import CardStatistic from '@/components/dashboard/home/CardStatistic.vue'
+import DatePicker from '@/components/ui/DatePicker.vue'
 import Profil2userForeshadowBackgroundIcon from '@/assets/images/icons/profil-2user-foreshadow-background.svg'
 import CrownForeshadowBackgroundIcon from '@/assets/images/icons/crown-foreshadow-background.svg'
 import Calendar2ForeshadowBackgroundIcon from '@/assets/images/icons/calendar-2-foreshadow-background.svg'
@@ -395,6 +292,11 @@ const { dashboardData, recentSocialAssistanceData, recentDevelopmentApplicantDat
 const { fetchDashboardData, fetchRecentSocialAssistance, fetchRecentDevelopmentApplicants } =
   dashboardStore
 
+const handleDateSelected = (date: Date) => {
+  // Handle the selected date, e.g., fetch events for this date
+  console.log('Selected date:', date)
+}
+
 onMounted(async () => {
   if (auth.success && auth.success.length) {
     toast.success(auth.success)
@@ -404,6 +306,10 @@ onMounted(async () => {
   await fetchRecentSocialAssistance()
   await fetchRecentDevelopmentApplicants()
   getResidentsStatistic()
+})
+
+onUnmounted(() => {
+  auth.success = ''
 })
 
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)

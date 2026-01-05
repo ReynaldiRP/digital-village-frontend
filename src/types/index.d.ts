@@ -8,3 +8,9 @@ export interface SidebarItem {
   link: string
   children?: SidebarItem[]
 }
+
+export interface ApiResponse<T> {
+  success: boolean
+  message: string
+  data: T
+}

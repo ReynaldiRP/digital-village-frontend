@@ -6,6 +6,7 @@ import type {
   DashboardResponse,
   RecentDevelopmentApplicantData,
 } from '@/types/dashboard'
+import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -22,8 +23,16 @@ export const useDashboardStore = defineStore('dashboard', () => {
     try {
       const response = await axiosInstance.get<DashboardResponse>('/dashboard/get-dashboard-data')
       dashboardData.value = response.data.data
-    } catch (error) {
-      errors.value = { message: handleError(error.response) }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
     } finally {
       loading.value = false
     }
@@ -36,9 +45,20 @@ export const useDashboardStore = defineStore('dashboard', () => {
         message: string
         data: RecentSocialAssistanceData[]
       }>('/dashboard/get-recent-social-assistances')
+
+      console.log(response.data.data)
+
       recentSocialAssistanceData.value = response.data.data
-    } catch (error) {
-      errors.value = { message: handleError(error.response) }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
     } finally {
       loading.value = false
     }
@@ -52,8 +72,16 @@ export const useDashboardStore = defineStore('dashboard', () => {
         data: RecentDevelopmentApplicantData[]
       }>('/dashboard/get-recent-development-applicants')
       recentDevelopmentApplicantData.value = response.data.data
-    } catch (error) {
-      errors.value = { message: handleError(error.response) }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
     } finally {
       loading.value = false
     }
