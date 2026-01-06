@@ -8,10 +8,12 @@
     />
 
     <section id="List-Kepala-Rumah" class="flex flex-col gap-[14px]">
-      <form id="Page-Search" class="flex items-center justify-between">
-        <SearchInput v-model="search" placeholder="Cari nama Kepala Rumah atau NIK" />
-        <FilterBar v-model:entries-per-page="entriesPerPage" @filter-click="handleFilterClick" />
-      </form>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center justify-between gap-4">
+          <SearchInput v-model="search" placeholder="Cari nama Kepala Rumah atau NIK" />
+          <FilterBar v-model:entries-per-page="entriesPerPage" @filter-apply="handleFilterApply" />
+        </div>
+      </div>
 
       <BaseLoading v-if="loading" />
 
@@ -38,7 +40,7 @@ import HeadOfFamilyCard from '@/components/head-of-family/HeadOfFamilyCard.vue'
 import PaginationNav from '@/components/common/PaginationNav.vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchInput from '@/components/common/SearchInput.vue'
-import FilterBar from '@/components/head-of-family/FilterBar.vue'
+import FilterBar, { type FilterOptions } from '@/components/head-of-family/FilterBar.vue'
 import BaseLoading from '@/components/ui/BaseLoading.vue'
 import debounce from 'lodash.debounce'
 
@@ -48,13 +50,18 @@ const { fetchHeadOfFamilies } = store
 
 const entriesPerPage = ref(5)
 const currentPage = ref(1)
+const activeFilters = ref<FilterOptions | null>(null)
+
 const debounceFetch = debounce(() => {
   fetchHeadOfFamilies(entriesPerPage.value)
 }, 300)
 
-const handleFilterClick = () => {
-  // TODO: Implement filter functionality
-  console.log('Filter clicked')
+const handleFilterApply = (filters: FilterOptions) => {
+  activeFilters.value = filters
+  // Apply filters to the data
+  // In a real app, you would send these filters to the API
+  console.log('Filters applied:', filters)
+  debounceFetch()
 }
 
 // Watch for changes and refetch data
