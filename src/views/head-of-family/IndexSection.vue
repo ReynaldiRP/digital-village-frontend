@@ -9,7 +9,7 @@
 
     <section id="List-Kepala-Rumah" class="flex flex-col gap-[14px]">
       <form id="Page-Search" class="flex items-center justify-between">
-        <SearchInput v-model="searchQuery" placeholder="Cari nama Kepala Rumah atau NIK" />
+        <SearchInput v-model="search" placeholder="Cari nama Kepala Rumah atau NIK" />
         <FilterBar v-model:entries-per-page="entriesPerPage" @filter-click="handleFilterClick" />
       </form>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onBeforeMount } from 'vue'
 import { useHeadOfFamilyStore } from '@/stores/headOfFamily'
 import { storeToRefs } from 'pinia'
 import HeadOfFamilyCard from '@/components/head-of-family/HeadOfFamilyCard.vue'
@@ -40,14 +40,17 @@ import PageHeader from '@/components/common/PageHeader.vue'
 import SearchInput from '@/components/common/SearchInput.vue'
 import FilterBar from '@/components/head-of-family/FilterBar.vue'
 import BaseLoading from '@/components/ui/BaseLoading.vue'
+import debounce from 'lodash.debounce'
 
 const store = useHeadOfFamilyStore()
-const { headOfFamilies, meta, loading } = storeToRefs(store)
+const { headOfFamilies, meta, loading, search } = storeToRefs(store)
 const { fetchHeadOfFamilies } = store
 
-const searchQuery = ref('')
 const entriesPerPage = ref(5)
 const currentPage = ref(1)
+const debounceFetch = debounce(() => {
+  fetchHeadOfFamilies(entriesPerPage.value)
+}, 300)
 
 const handleFilterClick = () => {
   // TODO: Implement filter functionality
@@ -55,8 +58,12 @@ const handleFilterClick = () => {
 }
 
 // Watch for changes and refetch data
-watch([searchQuery, entriesPerPage, currentPage], () => {
-  fetchHeadOfFamilies(entriesPerPage.value)
+watch([search, entriesPerPage, currentPage], () => {
+  debounceFetch()
+})
+
+onBeforeMount(() => {
+  debounceFetch.cancel()
 })
 
 onMounted(async () => {

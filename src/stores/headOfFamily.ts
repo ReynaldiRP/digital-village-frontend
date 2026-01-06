@@ -12,14 +12,24 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   const loading = ref(false)
   const success = ref<string>('')
   const errors = ref<Record<string, string>>({})
+  const search = ref<string>('')
 
   const fetchHeadOfFamilies = async (rowPerPage: number = 5) => {
     loading.value = true
     errors.value = {}
     try {
-      const response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
+      let response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
         '/head-of-families/all/paginated?row_per_page=' + rowPerPage,
       )
+
+      if (search.value && search.value.length) {
+        response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
+          '/head-of-families/all/paginated?row_per_page=' +
+            rowPerPage +
+            '&search=' +
+            encodeURIComponent(search.value),
+        )
+      }
 
       headOfFamilies.value = response.data.data.items
       meta.value = response.data.data.meta
@@ -45,6 +55,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading,
     success,
     errors,
+    search,
     fetchHeadOfFamilies,
   }
 })
