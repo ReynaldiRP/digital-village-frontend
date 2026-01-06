@@ -18,18 +18,17 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading.value = true
     errors.value = {}
     try {
-      let response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
-        '/head-of-families/all/paginated?row_per_page=' + rowPerPage,
-      )
+      const params = new URLSearchParams({
+        row_per_page: rowPerPage.toString(),
+      })
 
       if (search.value && search.value.length) {
-        response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
-          '/head-of-families/all/paginated?row_per_page=' +
-            rowPerPage +
-            '&search=' +
-            encodeURIComponent(search.value),
-        )
+        params.append('search', search.value)
       }
+
+      const response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
+        `/head-of-families/all/paginated?${params.toString()}`,
+      )
 
       headOfFamilies.value = response.data.data.items
       meta.value = response.data.data.meta
