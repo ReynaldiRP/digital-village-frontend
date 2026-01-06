@@ -47,7 +47,7 @@
             <label class="block text-sm font-medium mb-2">Jumlah Anggota Keluarga</label>
             <div class="flex gap-2">
               <select
-                v-model="filters.familyMembersMin"
+                v-model="filters.family_members.min"
                 class="flex-1 h-12 rounded-xl ring-[1.5px] ring-desa-background focus:ring-desa-black px-4 outline-none transition-all duration-300"
               >
                 <option :value="null">Min</option>
@@ -55,7 +55,7 @@
               </select>
               <span class="flex items-center">-</span>
               <select
-                v-model="filters.familyMembersMax"
+                v-model="filters.family_members.max"
                 class="flex-1 h-12 rounded-xl ring-[1.5px] ring-desa-background focus:ring-desa-black px-4 outline-none transition-all duration-300"
               >
                 <option :value="null">Max</option>
@@ -81,14 +81,12 @@
           <div class="filter-group">
             <label class="block text-sm font-medium mb-2">Status Perkawinan</label>
             <select
-              v-model="filters.maritalStatus"
+              v-model="filters.marital_status"
               class="w-full h-12 rounded-xl ring-[1.5px] ring-desa-background focus:ring-desa-black px-4 outline-none transition-all duration-300"
             >
               <option :value="null">Semua</option>
               <option value="single">Belum Kawin</option>
               <option value="married">Kawin</option>
-              <option value="divorced">Cerai</option>
-              <option value="widowed">Janda/Duda</option>
             </select>
           </div>
 
@@ -143,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch, computed, onMounted } from 'vue'
 import filterBlackIcon from '@/assets/images/icons/filter-black.svg'
 import filterWhiteIcon from '@/assets/images/icons/filter-white.svg'
 
@@ -153,10 +151,12 @@ interface Props {
 }
 
 export interface FilterOptions {
-  familyMembersMin: number | null
-  familyMembersMax: number | null
+  family_members: {
+    min: number | null
+    max: number | null
+  }
   gender: 'male' | 'female' | null
-  maritalStatus: 'single' | 'married' | 'divorced' | 'widowed' | null
+  marital_status: 'single' | 'married' | 'divorced' | 'widowed' | null
   occupation: string | null
   sortBy: 'newest' | 'oldest' | 'family_asc' | 'family_desc' | 'name_asc' | 'name_desc'
 }
@@ -174,15 +174,21 @@ const emit = defineEmits<Emits>()
 
 const isFilterOpen = ref(false)
 const filters = reactive<FilterOptions>({
-  familyMembersMin: null,
-  familyMembersMax: null,
+  family_members: {
+    min: null,
+    max: null,
+  },
   gender: null,
-  maritalStatus: null,
+  marital_status: null,
   occupation: null,
   sortBy: 'newest',
 })
 
 const initialFilters = { ...filters }
+
+onMounted(() => {
+  Object.assign(initialFilters, { ...filters })
+})
 
 const filterIconSrc = computed(() => (isFilterOpen.value ? filterWhiteIcon : filterBlackIcon))
 
@@ -202,10 +208,12 @@ const handleApplyFilter = () => {
 
 const handleReset = () => {
   Object.assign(filters, {
-    familyMembersMin: null,
-    familyMembersMax: null,
+    family_members: {
+      min: null,
+      max: null,
+    },
     gender: null,
-    maritalStatus: null,
+    marital_status: null,
     occupation: null,
     sortBy: 'newest',
   })

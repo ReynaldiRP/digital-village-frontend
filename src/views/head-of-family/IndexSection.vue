@@ -45,22 +45,19 @@ import BaseLoading from '@/components/ui/BaseLoading.vue'
 import debounce from 'lodash.debounce'
 
 const store = useHeadOfFamilyStore()
-const { headOfFamilies, meta, loading, search } = storeToRefs(store)
+const { headOfFamilies, meta, loading, search, filters } = storeToRefs(store)
 const { fetchHeadOfFamilies } = store
 
 const entriesPerPage = ref(5)
 const currentPage = ref(1)
-const activeFilters = ref<FilterOptions | null>(null)
 
 const debounceFetch = debounce(() => {
-  fetchHeadOfFamilies(entriesPerPage.value)
+  fetchHeadOfFamilies(entriesPerPage.value, filters.value)
 }, 300)
 
-const handleFilterApply = (filters: FilterOptions) => {
-  activeFilters.value = filters
-  // Apply filters to the data
-  // In a real app, you would send these filters to the API
-  console.log('Filters applied:', filters)
+const handleFilterApply = (appliedFilters: FilterOptions) => {
+  filters.value = appliedFilters
+  console.log('Filters applied:', appliedFilters)
   debounceFetch()
 }
 
@@ -74,7 +71,7 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
-  await fetchHeadOfFamilies(entriesPerPage.value)
+  await fetchHeadOfFamilies(entriesPerPage.value, filters.value)
 })
 </script>
 

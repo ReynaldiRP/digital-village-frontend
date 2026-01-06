@@ -1,3 +1,4 @@
+import type { FilterOptions } from '@/components/head-of-family/FilterBar.vue'
 import { handleError } from '@/helpers/errorHelper'
 import axiosInstance from '@/plugins/axios'
 import type { ApiResponse } from '@/types'
@@ -13,8 +14,12 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   const success = ref<string>('')
   const errors = ref<Record<string, string>>({})
   const search = ref<string>('')
+  const filters = ref<FilterOptions>()
 
-  const fetchHeadOfFamilies = async (rowPerPage: number = 5) => {
+  const fetchHeadOfFamilies = async (
+    rowPerPage: number = 5,
+    appliedFilters: FilterOptions | null = null,
+  ) => {
     loading.value = true
     errors.value = {}
     try {
@@ -24,6 +29,39 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
 
       if (search.value && search.value.length) {
         params.append('search', search.value)
+      }
+
+      // Handle filter parameters in backend's expected format: filters[key]=value
+      if (appliedFilters) {
+        // Handle nested family_members range - filters[family_count_range][min/max]
+        if (appliedFilters.family_members) {
+          if (appliedFilters.family_members.min !== null) {
+            params.append(
+              'filters[family_count_range][min]',
+              appliedFilters.family_members.min.toString(),
+            )
+          }
+          if (appliedFilters.family_members.max !== null) {
+            params.append(
+              'filters[family_count_range][max]',
+              appliedFilters.family_members.max.toString(),
+            )
+          }
+        }
+
+        // Handle simple filter values - filters[key]=value
+        if (appliedFilters.gender) {
+          params.append('filters[gender]', appliedFilters.gender)
+        }
+        if (appliedFilters.marital_status) {
+          params.append('filters[marital_status]', appliedFilters.marital_status)
+        }
+        if (appliedFilters.occupation) {
+          params.append('filters[occupation]', appliedFilters.occupation)
+        }
+        if (appliedFilters.sortBy) {
+          params.append('sort_by', appliedFilters.sortBy)
+        }
       }
 
       const response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
@@ -55,6 +93,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     success,
     errors,
     search,
+    filters,
     fetchHeadOfFamilies,
   }
 })
