@@ -18,6 +18,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
 
   const fetchHeadOfFamilies = async (
     rowPerPage: number = 5,
+    page: number = 1,
     appliedFilters: FilterOptions | null = null,
   ) => {
     loading.value = true
@@ -25,6 +26,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     try {
       const params = new URLSearchParams({
         row_per_page: rowPerPage.toString(),
+        page: page.toString(),
       })
 
       if (search.value && search.value.length) {

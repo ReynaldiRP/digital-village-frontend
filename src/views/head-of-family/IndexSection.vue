@@ -52,12 +52,11 @@ const entriesPerPage = ref(5)
 const currentPage = ref(1)
 
 const debounceFetch = debounce(() => {
-  fetchHeadOfFamilies(entriesPerPage.value, filters.value)
+  fetchHeadOfFamilies(entriesPerPage.value, currentPage.value, filters.value)
 }, 300)
 
 const handleFilterApply = (appliedFilters: FilterOptions) => {
   filters.value = appliedFilters
-  console.log('Filters applied:', appliedFilters)
   debounceFetch()
 }
 
@@ -71,7 +70,7 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
-  await fetchHeadOfFamilies(entriesPerPage.value, filters.value)
+  await fetchHeadOfFamilies(entriesPerPage.value, currentPage.value, filters.value)
 })
 </script>
 
