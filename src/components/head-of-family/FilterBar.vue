@@ -105,7 +105,7 @@
           <div class="filter-group">
             <label class="block text-sm font-medium mb-2">Urutkan Berdasarkan</label>
             <select
-              v-model="filters.sortBy"
+              v-model="filters.sort_by"
               class="w-full h-12 rounded-xl ring-[1.5px] ring-desa-background focus:ring-desa-black px-4 outline-none transition-all duration-300"
             >
               <option value="newest">Terbaru</option>
@@ -158,7 +158,7 @@ export interface FilterOptions {
   gender: 'male' | 'female' | null
   marital_status: 'single' | 'married' | 'divorced' | 'widowed' | null
   occupation: string | null
-  sortBy: 'newest' | 'oldest' | 'family_asc' | 'family_desc' | 'name_asc' | 'name_desc'
+  sort_by: 'newest' | 'oldest' | 'family_asc' | 'family_desc' | 'name_asc' | 'name_desc'
 }
 
 interface Emits {
@@ -181,7 +181,7 @@ const filters = reactive<FilterOptions>({
   gender: null,
   marital_status: null,
   occupation: null,
-  sortBy: 'newest',
+  sort_by: 'newest',
 })
 
 const initialFilters = { ...filters }
@@ -215,7 +215,7 @@ const handleReset = () => {
     gender: null,
     marital_status: null,
     occupation: null,
-    sortBy: 'newest',
+    sort_by: 'newest',
   })
 }
 

@@ -59,8 +59,8 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
         if (appliedFilters.occupation) {
           params.append('filters[occupation]', appliedFilters.occupation)
         }
-        if (appliedFilters.sortBy) {
-          params.append('sort_by', appliedFilters.sortBy)
+        if (appliedFilters.sort_by) {
+          params.append('filters[sort_by]', appliedFilters.sort_by)
         }
       }
 
