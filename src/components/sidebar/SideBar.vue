@@ -89,6 +89,15 @@ const sidebarItems: SidebarItemType[] = [
   },
   {
     id: 3,
+    name: 'Anggota Keluarga',
+    icon: {
+      active: crownDarkGreen,
+      inactive: crownSecondaryGreen,
+    },
+    link: '/family-members',
+  },
+  {
+    id: 4,
     name: 'Bantuan Sosial',
     icon: {
       active: bag2DarkGreen,
@@ -97,7 +106,7 @@ const sidebarItems: SidebarItemType[] = [
     link: '#',
     children: [
       {
-        id: 4,
+        id: 5,
         name: 'List Bansos',
         icon: {
           active: accordionLine,
@@ -106,7 +115,7 @@ const sidebarItems: SidebarItemType[] = [
         link: '/bantuan-sosial', // Update to use Vue Router path
       },
       {
-        id: 5,
+        id: 6,
         name: 'Pengajuan Bansos',
         icon: {
           active: accordionLine,
@@ -117,7 +126,7 @@ const sidebarItems: SidebarItemType[] = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     name: 'Jadwal Desa',
     icon: {
       active: bag2DarkGreen,
@@ -126,7 +135,7 @@ const sidebarItems: SidebarItemType[] = [
     link: '#',
     children: [
       {
-        id: 7,
+        id: 8,
         name: 'Pembangunan',
         icon: {
           active: accordionLine,
@@ -135,7 +144,7 @@ const sidebarItems: SidebarItemType[] = [
         link: '/pembangunan-desa', // Update to use Vue Router path
       },
       {
-        id: 8,
+        id: 9,
         name: 'Events Desa',
         icon: {
           active: accordionLine,
@@ -146,7 +155,7 @@ const sidebarItems: SidebarItemType[] = [
     ],
   },
   {
-    id: 9,
+    id: 10,
     name: 'Profile Desa',
     icon: {
       active: building4DarkGreen,

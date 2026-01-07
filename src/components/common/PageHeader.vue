@@ -1,6 +1,20 @@
 <template>
   <div class="flex items-center justify-between">
-    <h1 class="font-semibold text-2xl">{{ title }}</h1>
+    <div v-if="hasSecondSegment" class="flex flex-col gap-2">
+      <div class="flex gap-1 items-center leading-5 text-desa-secondary">
+        <template v-for="(breadcrumb, index) in breadcrumbs" :key="index">
+          <RouterLink
+            :to="breadcrumb.route"
+            class="last-of-type:text-desa-dark-green last-of-type:font-semibold capitalize"
+          >
+            {{ breadcrumb.label }}
+          </RouterLink>
+          <span v-if="breadcrumbs && index < breadcrumbs.length - 1">/</span>
+        </template>
+      </div>
+      <h1 class="font-semibold text-2xl">Manage Kepala Rumah</h1>
+    </div>
+    <h1 v-else class="font-semibold text-2xl">{{ title }}</h1>
     <a
       v-if="showAddButton"
       :href="addButtonRoute"
@@ -13,21 +27,109 @@
       />
       <p class="font-medium text-white">{{ addButtonText }}</p>
     </a>
+    <button
+      v-if="showDeleteButton"
+      @click="toggleModal"
+      class="flex items-center rounded-2xl py-4 px-6 gap-[10px] bg-desa-red"
+    >
+      <p class="font-medium text-white">Hapus Data</p>
+      <img src="@/assets/images/icons/trash-white.svg" class="flex size-6 shrink-0" alt="icon" />
+    </button>
+    <div
+      v-if="isModalOpen"
+      id="Modal-Delete"
+      class="modal fixed inset-0 h-screen z-40 flex bg-[#080C1ACC]"
+    >
+      <div
+        id="Alert"
+        class="flex flex-col w-[335px] shrink-0 rounded-2xl overflow-hidden bg-white m-auto"
+      >
+        <div class="flex items-center justify-between p-4 gap-3 bg-desa-black">
+          <p class="font-medium leading-5 text-white">Hapus Kepala Keluarga?</p>
+          <button class="btn-close-modal">
+            <img
+              src="@/assets/images/icons/close-circle-white.svg"
+              class="flex size-6 shrink-0"
+              alt="icon"
+            />
+          </button>
+        </div>
+        <div class="flex flex-col p-4 gap-3">
+          <p class="font-medium text-sm leading-[22.5px] text-desa-secondary">
+            Tindakan ini permanen dan tidak bisa dibatalkan!
+          </p>
+          <hr class="border-desa-background" />
+          <div class="flex items-center gap-3">
+            <button
+              class="btn-close-modal flex items-center h-14 rounded-2xl py-3 px-8 gap-[10px] border border-desa-background hover:bg-desa-black hover:text-white transition-setup"
+            >
+              <span class="font-semibold text-sm">Batal</span>
+            </button>
+            <button
+              class="flex items-center h-14 rounded-2xl py-3 px-8 gap-[10px] bg-desa-red w-full"
+            >
+              <img
+                src="@/assets/images/icons/trash-white.svg"
+                class="flex size-6 shrink-0"
+                alt=""
+              />
+              <span class="font-semibold text-sm text-white">Iya Hapus</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 interface Props {
   title: string
+  breadcrumbs?: Array<{
+    label: string
+    route: string
+  }>
   showAddButton?: boolean
+  showDeleteButton?: boolean
   addButtonText?: string
   addButtonRoute?: string
 }
 
 withDefaults(defineProps<Props>(), {
   showAddButton: false,
+  showDeleteButton: false,
   addButtonText: 'Add New',
   addButtonRoute: '#',
+})
+
+const route = useRoute()
+const isModalOpen = ref(false)
+
+const toggleModal = () => {
+  isModalOpen.value = !isModalOpen.value
+}
+
+const hasSecondSegment = computed(() => {
+  const pathSegments = route.path.split('/').filter((segment) => segment !== '')
+  return pathSegments.length >= 2
+})
+
+const closeFilterOnClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (isModalOpen.value && !target.closest('#Modal-Delete') && !target.closest('button')) {
+    isModalOpen.value = false
+  }
+}
+
+watch(isModalOpen, (newValue) => {
+  if (newValue) {
+    document.addEventListener('click', closeFilterOnClickOutside)
+  } else {
+    document.removeEventListener('click', closeFilterOnClickOutside)
+  }
 })
 </script>
 

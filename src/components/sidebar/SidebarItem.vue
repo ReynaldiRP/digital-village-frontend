@@ -86,7 +86,9 @@ const props = defineProps<{
 const route = useRoute()
 
 const isActive = computed(() => {
-  return route.path === props.item.link
+  if (route.path === props.item.link) return true
+
+  return route.path.startsWith(props.item.link + '/')
 })
 
 const isChildActive = computed(() => {

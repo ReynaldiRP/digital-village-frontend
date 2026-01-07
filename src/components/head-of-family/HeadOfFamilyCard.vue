@@ -41,12 +41,12 @@
         {{ headOfFamily.family_members_count }} Anggota Keluarga
       </span>
     </p>
-    <a
-      :href="`kd-kepala-rumah-manage.html?id=${headOfFamily.id}`"
+    <RouterLink
+      :to="`/head-of-family/manage/${headOfFamily.id}`"
       class="flex items-center shrink-0 gap-[10px] rounded-2xl py-4 px-6 bg-desa-black"
     >
       <span class="font-medium text-white">Manage</span>
-    </a>
+    </RouterLink>
   </div>
 </template>
 

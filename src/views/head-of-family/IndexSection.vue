@@ -7,7 +7,7 @@
       add-button-route="kd-kepala-rumah-add.html"
     />
 
-    <section id="List-Kepala-Rumah" class="flex flex-col gap-[14px]">
+    <section id="List-Kepala-Rumah" class="flex flex-col gap-[14px] mt-4">
       <div class="flex flex-col gap-4">
         <div class="flex items-center justify-between gap-4">
           <SearchInput v-model="search" placeholder="Cari nama Kepala Rumah atau NIK" />
