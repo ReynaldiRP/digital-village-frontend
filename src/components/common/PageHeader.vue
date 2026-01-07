@@ -46,7 +46,7 @@
       >
         <div class="flex items-center justify-between p-4 gap-3 bg-desa-black">
           <p class="font-medium leading-5 text-white">Hapus Kepala Keluarga?</p>
-          <button class="btn-close-modal">
+          <button class="btn-close-modal" @click="toggleModal">
             <img
               src="@/assets/images/icons/close-circle-white.svg"
               class="flex size-6 shrink-0"
@@ -62,6 +62,7 @@
           <div class="flex items-center gap-3">
             <button
               class="btn-close-modal flex items-center h-14 rounded-2xl py-3 px-8 gap-[10px] border border-desa-background hover:bg-desa-black hover:text-white transition-setup"
+              @click="toggleModal"
             >
               <span class="font-semibold text-sm">Batal</span>
             </button>
@@ -83,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface Props {
@@ -117,18 +118,23 @@ const hasSecondSegment = computed(() => {
   return pathSegments.length >= 2
 })
 
-const closeFilterOnClickOutside = (event: MouseEvent) => {
+const closeModalOnClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
-  if (isModalOpen.value && !target.closest('#Modal-Delete') && !target.closest('button')) {
+  const modal = document.querySelector('#Modal-Delete')
+
+  if (modal && !modal.querySelector('#Alert')?.contains(target)) {
     isModalOpen.value = false
   }
 }
 
-watch(isModalOpen, (newValue) => {
+watch(isModalOpen, async (newValue) => {
   if (newValue) {
-    document.addEventListener('click', closeFilterOnClickOutside)
+    await nextTick()
+    setTimeout(() => {
+      document.addEventListener('click', closeModalOnClickOutside)
+    }, 0)
   } else {
-    document.removeEventListener('click', closeFilterOnClickOutside)
+    document.removeEventListener('click', closeModalOnClickOutside)
   }
 })
 </script>
