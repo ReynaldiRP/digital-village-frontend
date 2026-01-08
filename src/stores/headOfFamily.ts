@@ -9,6 +9,7 @@ import { ref } from 'vue'
 
 export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   const headOfFamilies = ref<HeadOfFamily[]>([])
+  const headOfFamily = ref<HeadOfFamily>(null as unknown as HeadOfFamily)
   const meta = ref<MetaData | null>(null)
   const loading = ref(false)
   const success = ref<string>('')
@@ -88,8 +89,30 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     }
   }
 
+  const fetchHeadOfFamilyById = async (id: string) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const response = await axiosInstance.get<ApiResponse<HeadOfFamily>>(`/head-of-families/${id}`)
+      headOfFamily.value = response.data.data
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     headOfFamilies,
+    headOfFamily,
     meta,
     loading,
     success,
@@ -97,5 +120,6 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     search,
     filters,
     fetchHeadOfFamilies,
+    fetchHeadOfFamilyById,
   }
 })

@@ -1,116 +1,10 @@
 <template>
   <div>
     <PageHeader title="Manage Kepala Rumah" show-delete-button :breadcrumbs="breadcrumbs" />
-    <div class="flex gap-[14px] mt-4">
+    <BaseLoading v-if="loading" />
+    <div v-else-if="headOfFamily" class="flex gap-[14px] mt-4">
       <div class="flex flex-col w-[calc(525/1000*100%)] shrink-0 gap-[14px]">
-        <section id="Kepala-Rumah" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
-          <p class="font-medium leading-5 text-desa-secondary">Kepala Rumah</p>
-          <div class="flex items-center gap-4">
-            <div class="flex size-[76px] shrink-0 rounded-full overflow-hidden bg-desa-foreshadow">
-              <img
-                src="@/assets/images/photos/photo-2.png"
-                class="w-full h-full object-cover"
-                alt="photo"
-              />
-            </div>
-            <div class="flex flex-col gap-[6px] w-full">
-              <p class="font-semibold text-xl line-clamp-1">Feri Mahrudin Asep</p>
-              <p class="flex items-center gap-1">
-                <img
-                  src="@/assets/images/icons/briefcase-secondary-green.svg"
-                  class="flex size-[18px] shrink-0"
-                  alt="icon"
-                />
-                <span class="font-medium text-sm text-desa-secondary">Tukang Bangunan</span>
-              </p>
-            </div>
-            <div
-              class="badge rounded-full p-3 gap-2 flex w-[100px] justify-center shrink-0 bg-desa-soft-green"
-            >
-              <span class="font-semibold text-xs text-white uppercase">Menikah</span>
-            </div>
-          </div>
-          <hr class="border-desa-foreshadow" />
-          <div class="flex items-center w-full gap-3">
-            <div
-              class="flex size-[52px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-            >
-              <img
-                src="@/assets/images/icons/keyboard-dark-green.svg"
-                class="flex size-6 shrink-0"
-                alt="icon"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full">
-              <p class="font-semibold text-xl leading-[22.5px]">20051005922001005</p>
-              <span class="font-medium text-desa-secondary"> Nomor Induk Kependudukan </span>
-            </div>
-          </div>
-          <hr class="border-desa-foreshadow" />
-          <div class="flex items-center w-full gap-3">
-            <div
-              class="flex size-[52px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-            >
-              <img
-                src="@/assets/images/icons/user-square-dark-green.svg"
-                class="flex size-6 shrink-0"
-                alt="icon"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full">
-              <p class="font-semibold text-xl leading-[22.5px]">42 Tahun</p>
-              <span class="font-medium text-desa-secondary"> Umur Kepala Rumah </span>
-            </div>
-          </div>
-          <hr class="border-desa-foreshadow" />
-          <div class="flex items-center w-full gap-3">
-            <div
-              class="flex size-[52px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-            >
-              <img
-                src="@/assets/images/icons/man-dark-green.svg"
-                class="flex size-6 shrink-0"
-                alt="icon"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full">
-              <p class="font-semibold text-xl leading-[22.5px]">Pria</p>
-              <span class="font-medium text-desa-secondary"> Jenis Kelamin </span>
-            </div>
-          </div>
-          <hr class="border-desa-foreshadow" />
-          <div class="flex items-center w-full gap-3">
-            <div
-              class="flex size-[52px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-            >
-              <img
-                src="@/assets/images/icons/sms-dark-green.svg"
-                class="flex size-6 shrink-0"
-                alt="icon"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full">
-              <p class="font-semibold text-xl leading-[22.5px]">fransutomo@desadigital.com</p>
-              <span class="font-medium text-desa-secondary"> Email Address </span>
-            </div>
-          </div>
-          <hr class="border-desa-foreshadow" />
-          <div class="flex items-center w-full gap-3">
-            <div
-              class="flex size-[52px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-            >
-              <img
-                src="@/assets/images/icons/call-dark-green.svg"
-                class="flex size-6 shrink-0"
-                alt="icon"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full">
-              <p class="font-semibold text-xl leading-[22.5px]">083212349000</p>
-              <span class="font-medium text-desa-secondary"> Nomor Hp </span>
-            </div>
-          </div>
-        </section>
+        <DetailHeadOfFamily :head-of-family="headOfFamily" />
         <section id="Anggota-Keluarga" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
           <div class="flex items-center justify-between">
             <div class="flex flex-col gap-[6px]">
@@ -686,16 +580,34 @@
         </section>
       </div>
     </div>
+    <div v-else class="text-center py-8 text-desa-secondary">Data not found</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import PageHeader from '@/components/common/PageHeader.vue'
+import DetailHeadOfFamily from '@/components/head-of-family/manage/DetailHeadOfFamily.vue'
+import { useHeadOfFamilyStore } from '@/stores/headOfFamily'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import BaseLoading from '@/components/ui/BaseLoading.vue'
 
 const breadcrumbs = [
   { label: 'Kepala Rumah', route: '/head-of-family' },
   { label: 'Manage Kepala Rumah', route: `/head-of-family/manage` },
 ]
+
+const route = useRoute()
+const headOfFamilyStore = useHeadOfFamilyStore()
+const { headOfFamily, loading } = storeToRefs(headOfFamilyStore)
+
+onMounted(async () => {
+  const id = route.params.id as string
+  if (id) {
+    await headOfFamilyStore.fetchHeadOfFamilyById(id)
+  }
+})
 </script>
 
 <style scoped></style>

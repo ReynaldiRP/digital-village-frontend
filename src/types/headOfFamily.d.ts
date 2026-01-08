@@ -23,6 +23,7 @@ export interface HeadOfFamily {
   identify_number: number
   gender: 'male' | 'female'
   birth_date: string
+  age: number
   phone_number: string
   occupation: string
   profile_picture: string

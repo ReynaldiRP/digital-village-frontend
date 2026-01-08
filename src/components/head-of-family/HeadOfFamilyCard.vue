@@ -41,28 +41,34 @@
         {{ headOfFamily.family_members_count }} Anggota Keluarga
       </span>
     </p>
-    <RouterLink
-      :to="`/head-of-family/manage/${headOfFamily.id}`"
+    <button
+      @click="redirectToManage(headOfFamily.id)"
       class="flex items-center shrink-0 gap-[10px] rounded-2xl py-4 px-6 bg-desa-black"
     >
       <span class="font-medium text-white">Manage</span>
-    </RouterLink>
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { HeadOfFamily } from '@/types/headOfFamily'
+import { useRouter } from 'vue-router'
 
 interface Props {
   headOfFamily: HeadOfFamily
 }
 
 const props = defineProps<Props>()
+const router = useRouter()
 
 const displayPhoto = computed(() => {
   return props.headOfFamily.profile_picture || '@/assets/images/photos/default-avatar.png'
 })
+
+const redirectToManage = async (id: string) => {
+  router.push(`/head-of-family/manage/${id}`)
+}
 </script>
 
 <style scoped></style>
