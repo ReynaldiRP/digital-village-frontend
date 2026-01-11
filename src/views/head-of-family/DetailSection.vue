@@ -6,182 +6,11 @@
       <div class="flex flex-col w-[calc(525/1000*100%)] shrink-0 gap-[14px]">
         <DetailHeadOfFamily :head-of-family="headOfFamily" />
         <DetailFamilyMember :family-members="headOfFamily.family_members" />
-        <!-- <section id="Anggota-Keluarga" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
-          <div class="flex items-center justify-between">
-            <div class="flex flex-col gap-[6px]">
-              <p class="font-semibold text-[32px] leading-10">3</p>
-              <p class="font-medium leading-5 text-desa-secondary">Anggota Keluarga</p>
-            </div>
-            <img
-              src="@/assets/images/icons/profile-2user-foreshadow-background.svg"
-              class="flex size-12 shrink-0"
-              alt="icon"
-            />
-          </div>
-          <hr class="border-desa-foreshadow" />
-          <div id="Istri" class="flex flex-col gap-[14px]">
-            <p class="font-medium leading-5 text-desa-secondary">Istri (1)</p>
-            <div class="card flex flex-col rounded-2xl border border-desa-background p-4 gap-6">
-              <div class="flex items-center gap-4">
-                <div
-                  class="flex size-[64px] shrink-0 rounded-full overflow-hidden bg-desa-foreshadow"
-                >
-                  <img
-                    src="@/assets/images/photos/kk-photo-2.png"
-                    class="w-full h-full object-cover"
-                    alt="photo"
-                  />
-                </div>
-                <div class="flex flex-col gap-[6px] w-full">
-                  <p class="font-semibold text-xl line-clamp-1">Puji Siti Aminah</p>
-                  <p class="flex items-center gap-1">
-                    <img
-                      src="@/assets/images/icons/briefcase-secondary-green.svg"
-                      class="flex size-[18px] shrink-0"
-                      alt="icon"
-                    />
-                    <span class="font-medium text-sm text-desa-secondary">Ibu Rumah Tangga</span>
-                  </p>
-                </div>
-                <p class="font-medium leading-5 text-nowrap">32 tahun</p>
-              </div>
-              <hr class="border-desa-background" />
-              <div class="flex justify-between items-center">
-                <p class="flex items-center gap-1">
-                  <img
-                    src="@/assets/images/icons/keyboard-secondary-green.svg"
-                    class="flex size-[18px] shrink-0"
-                    alt="icon"
-                  />
-                  <span class="font-medium text-sm text-desa-secondary"
-                    >Nomor Induk Kependudukan:</span
-                  >
-                </p>
-                <p class="font-medium leading-5">27192018210818291</p>
-              </div>
-            </div>
-          </div>
-          <div id="Anak" class="flex flex-col gap-[14px]">
-            <p class="font-medium leading-5 text-desa-secondary">Anak (2)</p>
-            <div class="card flex flex-col rounded-2xl border border-desa-background p-4 gap-6">
-              <div class="flex items-center gap-4">
-                <div
-                  class="flex size-[64px] shrink-0 rounded-full overflow-hidden bg-desa-foreshadow"
-                >
-                  <img
-                    src="@/assets/images/photos/kk-photo-3.png"
-                    class="w-full h-full object-cover"
-                    alt="photo"
-                  />
-                </div>
-                <div class="flex flex-col gap-[6px] w-full">
-                  <p class="font-semibold text-xl line-clamp-1">Karin Icshan</p>
-                  <p class="flex items-center gap-1">
-                    <img
-                      src="@/assets/images/icons/briefcase-secondary-green.svg"
-                      class="flex size-[18px] shrink-0"
-                      alt="icon"
-                    />
-                    <span class="font-medium text-sm text-desa-secondary">Mahasiswi</span>
-                  </p>
-                </div>
-                <p class="font-medium leading-5 text-nowrap">24 Tahun</p>
-              </div>
-              <hr class="border-desa-background" />
-              <div class="flex justify-between items-center">
-                <p class="flex items-center gap-1">
-                  <img
-                    src="@/assets/images/icons/keyboard-secondary-green.svg"
-                    class="flex size-[18px] shrink-0"
-                    alt="icon"
-                  />
-                  <span class="font-medium text-sm text-desa-secondary"
-                    >Nomor Induk Kependudukan:</span
-                  >
-                </p>
-                <p class="font-medium leading-5">24910120192019281</p>
-              </div>
-            </div>
-            <div class="card flex flex-col rounded-2xl border border-desa-background p-4 gap-6">
-              <div class="flex items-center gap-4">
-                <div
-                  class="flex size-[64px] shrink-0 rounded-full overflow-hidden bg-desa-foreshadow"
-                >
-                  <img
-                    src="@/assets/images/photos/photo-1.png"
-                    class="w-full h-full object-cover"
-                    alt="photo"
-                  />
-                </div>
-                <div class="flex flex-col gap-[6px] w-full">
-                  <p class="font-semibold text-xl line-clamp-1">Rizky Icshan</p>
-                  <p class="flex items-center gap-1">
-                    <img
-                      src="@/assets/images/icons/briefcase-secondary-green.svg"
-                      class="flex size-[18px] shrink-0"
-                      alt="icon"
-                    />
-                    <span class="font-medium text-sm text-desa-secondary">Mahasiswa</span>
-                  </p>
-                </div>
-                <p class="font-medium leading-5 text-nowrap">17 tahun</p>
-              </div>
-              <hr class="border-desa-background" />
-              <div class="flex justify-between items-center">
-                <p class="flex items-center gap-1">
-                  <img
-                    src="@/assets/images/icons/keyboard-secondary-green.svg"
-                    class="flex size-[18px] shrink-0"
-                    alt="icon"
-                  />
-                  <span class="font-medium text-sm text-desa-secondary"
-                    >Nomor Induk Kependudukan:</span
-                  >
-                </p>
-                <p class="font-medium leading-5">28193018301839101</p>
-              </div>
-            </div>
-          </div>
-        </section> -->
       </div>
       <div class="flex flex-col flex-1 shrink-0 gap-[14px]">
         <section id="Recent-Activity" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
           <p class="font-medium leading-5 text-desa-secondary">Recent Activity</p>
-          <div id="Tabs-Button" class="grid grid-cols-3 gap-3">
-            <button data-content="Bansos" class="tab-btn group active">
-              <div
-                class="flex items-center justify-center rounded-full border border-desa-background py-[14px] px-[18px] group-hover:bg-desa-black group-[.active]:bg-desa-black transition-setup"
-              >
-                <span
-                  class="font-medium leading-5 text-desa-secondary group-hover:text-white group-[.active]:text-white transition-setup"
-                >
-                  Bansos
-                </span>
-              </div>
-            </button>
-            <button data-content="Events" class="tab-btn group">
-              <div
-                class="flex items-center justify-center rounded-full border border-desa-background py-[14px] px-[18px] group-hover:bg-desa-black group-[.active]:bg-desa-black transition-setup"
-              >
-                <span
-                  class="font-medium leading-5 text-desa-secondary group-hover:text-white group-[.active]:text-white transition-setup"
-                >
-                  Events
-                </span>
-              </div>
-            </button>
-            <button data-content="Applicants" class="tab-btn group">
-              <div
-                class="flex items-center justify-center rounded-full border border-desa-background py-[14px] px-[18px] group-hover:bg-desa-black group-[.active]:bg-desa-black transition-setup"
-              >
-                <span
-                  class="font-medium leading-5 text-desa-secondary group-hover:text-white group-[.active]:text-white transition-setup"
-                >
-                  Applicants
-                </span>
-              </div>
-            </button>
-          </div>
+          <TabButtonContainer v-model="selectedTab" />
           <div id="Tabs-Content" class="flex flex-col">
             <div id="Bansos" class="flex flex-col gap-6">
               <div class="card flex flex-col rounded-2xl border border-desa-background p-4 gap-4">
@@ -589,11 +418,12 @@
 import PageHeader from '@/components/common/PageHeader.vue'
 import DetailHeadOfFamily from '@/components/head-of-family/manage/DetailHeadOfFamily.vue'
 import { useHeadOfFamilyStore } from '@/stores/headOfFamily'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import BaseLoading from '@/components/ui/BaseLoading.vue'
 import DetailFamilyMember from '@/components/head-of-family/manage/DetailFamilyMember.vue'
+import TabButtonContainer from '@/components/ui/TabButtonContainer.vue'
 
 const breadcrumbs = [
   { label: 'Kepala Rumah', route: '/head-of-family' },
@@ -603,6 +433,7 @@ const breadcrumbs = [
 const route = useRoute()
 const headOfFamilyStore = useHeadOfFamilyStore()
 const { headOfFamily, loading } = storeToRefs(headOfFamilyStore)
+const selectedTab = ref<string>('Bansos')
 
 onMounted(async () => {
   const id = route.params.id as string
