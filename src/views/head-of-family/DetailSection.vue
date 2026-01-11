@@ -5,7 +5,8 @@
     <div v-else-if="headOfFamily" class="flex gap-[14px] mt-4">
       <div class="flex flex-col w-[calc(525/1000*100%)] shrink-0 gap-[14px]">
         <DetailHeadOfFamily :head-of-family="headOfFamily" />
-        <section id="Anggota-Keluarga" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
+        <DetailFamilyMember :family-members="headOfFamily.family_members" />
+        <!-- <section id="Anggota-Keluarga" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
           <div class="flex items-center justify-between">
             <div class="flex flex-col gap-[6px]">
               <p class="font-semibold text-[32px] leading-10">3</p>
@@ -141,7 +142,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
       </div>
       <div class="flex flex-col flex-1 shrink-0 gap-[14px]">
         <section id="Recent-Activity" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">
@@ -592,6 +593,7 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import BaseLoading from '@/components/ui/BaseLoading.vue'
+import DetailFamilyMember from '@/components/head-of-family/manage/DetailFamilyMember.vue'
 
 const breadcrumbs = [
   { label: 'Kepala Rumah', route: '/head-of-family' },

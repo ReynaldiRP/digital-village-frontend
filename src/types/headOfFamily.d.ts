@@ -11,6 +11,7 @@ export interface FamilyMember {
   identify_number: number
   gender: 'male' | 'female'
   birth_date: string
+  age: number
   phone_number: string
   occupation: string
   marital_status: 'single' | 'married' | 'divorced' | 'widowed'
