@@ -410,7 +410,7 @@
         </section>
       </div>
     </div>
-    <div v-else class="text-center py-8 text-desa-secondary">Data not found</div>
+    <BaseEmptyState v-else message="Data not found" />
   </div>
 </template>
 
@@ -424,6 +424,7 @@ import { storeToRefs } from 'pinia'
 import BaseLoading from '@/components/ui/BaseLoading.vue'
 import DetailFamilyMember from '@/components/head-of-family/manage/DetailFamilyMember.vue'
 import TabButtonContainer from '@/components/ui/TabButtonContainer.vue'
+import BaseEmptyState from '@/components/ui/BaseEmptyState.vue'
 
 const breadcrumbs = [
   { label: 'Kepala Rumah', route: '/head-of-family' },

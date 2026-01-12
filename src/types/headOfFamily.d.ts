@@ -1,3 +1,6 @@
+import type { EventParticipation } from './event'
+import type { SocialAssistance } from './socialAssistance'
+
 export interface User {
   id: string
   name: string
@@ -32,6 +35,8 @@ export interface HeadOfFamily {
   created_at: string
   family_members_count: number
   family_members: FamilyMember[]
+  social_assistances: SocialAssistance[]
+  events: EventParticipation[]
 }
 
 export interface MetaData {

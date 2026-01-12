@@ -25,7 +25,7 @@
         />
       </template>
 
-      <div v-else class="text-center py-8 text-desa-secondary">No data available</div>
+      <BaseEmptyState v-else message="No data available" />
     </section>
 
     <PaginationNav v-if="meta" v-model:current-page="currentPage" :total-pages="meta.last_page" />
@@ -43,6 +43,7 @@ import PageHeader from '@/components/common/PageHeader.vue'
 import SearchInput from '@/components/common/SearchInput.vue'
 import FilterBar, { type FilterOptions } from '@/components/head-of-family/FilterBar.vue'
 import BaseLoading from '@/components/ui/BaseLoading.vue'
+import BaseEmptyState from '@/components/ui/BaseEmptyState.vue'
 import debounce from 'lodash.debounce'
 
 const store = useHeadOfFamilyStore()

@@ -100,18 +100,12 @@
               </div>
             </div>
           </div>
-          <div
-            class="event-empty-state hidden m-auto h-[384px] flex flex-col shrink-0 justify-center items-center gap-6"
-          >
-            <img
-              src="@/assets/images/icons/calendar-remove-secondary-green.svg"
-              class="flex size-[52px] shrink-0"
-              alt="icon"
-            />
-            <p class="font-medium leading-5 text-center text-desa-secondary">
-              Ups, nampaknya belum ada event
-            </p>
-          </div>
+          <BaseEmptyState
+            class="event-empty-state hidden m-auto"
+            size="large"
+            icon="/src/assets/images/icons/calendar-remove-secondary-green.svg"
+            message="Ups, nampaknya belum ada event"
+          />
         </div>
       </section>
     </div>
@@ -283,6 +277,7 @@ import RecentSocialAssistanceItem from '@/components/dashboard/home/RecentSocial
 import RecentDevelopmentApplicantItem from '@/components/dashboard/home/RecentDevelopmentApplicantItem.vue'
 import { useAuthStore } from '@/stores/auth'
 import { toast } from 'vue3-toastify'
+import BaseEmptyState from '@/components/ui/BaseEmptyState.vue'
 
 const auth = useAuthStore()
 
