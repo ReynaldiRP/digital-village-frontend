@@ -8,6 +8,7 @@ export interface EventMaster {
   price: number
   date: string // YYYY-MM-DD
   time: string // HH:mm:ss
+  total_participants?: number
   is_active: number // 0 | 1
   created_at: string
   updated_at: string

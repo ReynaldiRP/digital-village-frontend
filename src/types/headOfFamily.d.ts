@@ -1,5 +1,6 @@
 import type { EventParticipation } from './event'
 import type { SocialAssistance } from './socialAssistance'
+import type { DevelopmentApplicant } from './development'
 
 export interface User {
   id: string
@@ -37,6 +38,7 @@ export interface HeadOfFamily {
   family_members: FamilyMember[]
   social_assistances: SocialAssistance[]
   events: EventParticipation[]
+  development_applicants: DevelopmentApplicant[]
 }
 
 export interface MetaData {
