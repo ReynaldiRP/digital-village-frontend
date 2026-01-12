@@ -8,7 +8,6 @@ export interface EventMaster {
   price: number
   date: string // YYYY-MM-DD
   time: string // HH:mm:ss
-  total_participants?: number
   is_active: number // 0 | 1
   created_at: string
   updated_at: string
@@ -17,6 +16,7 @@ export interface EventMaster {
 export interface EventParticipation {
   id: string
   event: EventMaster
+  total_participants?: number
   quantity: number
   total_price: number
   payment_status: PaymentStatus

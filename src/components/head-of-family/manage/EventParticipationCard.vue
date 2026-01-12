@@ -26,7 +26,7 @@
             alt="icon"
           />
           <p class="font-medium text-sm text-desa-orange">
-            {{ event.event?.total_participants || 0 }} total partisipasi
+            {{ event.total_participants || 0 }} total partisipasi
           </p>
         </div>
       </div>
@@ -51,6 +51,9 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+console.log(props.event);
+
 
 const formattedDate = computed(() => {
   // TODO: Format the actual date from the API
