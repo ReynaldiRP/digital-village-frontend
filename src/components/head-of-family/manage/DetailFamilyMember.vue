@@ -188,7 +188,7 @@ const husbandData = computed(() => {
 })
 
 const childrenData = computed(() => {
-  return props.familyMembers.filter((member) => member.relation === 'children')
+  return props.familyMembers.filter((member) => member.relation === 'child')
 })
 </script>
 

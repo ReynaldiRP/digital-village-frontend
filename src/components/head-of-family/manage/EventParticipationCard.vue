@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { EventParticipation } from '@/types/event'
-import { formatRupiah } from '@/helpers/format'
+import { formatRupiah, formatDate } from '@/helpers/format'
 
 interface Props {
   event: EventParticipation
@@ -52,13 +52,10 @@ interface Props {
 
 const props = defineProps<Props>()
 
-console.log(props.event);
-
+console.log(props.event)
 
 const formattedDate = computed(() => {
-  // TODO: Format the actual date from the API
-  // For now, using placeholder
-  return 'Fri, 3 Jan 2025'
+  return formatDate(props.event.event?.date)
 })
 
 const eventThumbnail = computed(() => {
@@ -68,7 +65,7 @@ const eventThumbnail = computed(() => {
 
 const formattedPrice = computed(() => {
   const price = props.event.event?.price
-  return price ? formatRupiah(price) : 'Gratis'
+  return price ? `Rp.${formatRupiah(price)}` : 'Gratis'
 })
 </script>
 

@@ -33,7 +33,7 @@
         <img src="@/assets/images/icons/calendar-2-dark-green.svg" class="flex size-6" alt="icon" />
       </div>
       <div>
-        <p class="font-semibold leading-5 text-desa-dark-green">{{ formattedDate }}</p>
+        <p class="font-semibold leading-5 text-desa-dark-green">{{ formatDate(props.applicant.development?.start_date) }}</p>
         <p class="font-medium text-sm text-desa-secondary">Tanggal Pelaksanaan</p>
       </div>
     </div>
@@ -57,6 +57,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { DevelopmentApplicant } from '@/types/development'
+import { formatDate } from '@/helpers/format'
 
 interface Props {
   applicant: DevelopmentApplicant
@@ -80,12 +81,6 @@ const badgeClass = computed(() => {
 const applicantThumbnail = computed(() => {
   // Return the development thumbnail or a default placeholder
   return props.applicant.development?.thumbnail || '/src/assets/images/thumbnails/event-image-1.png'
-})
-
-const formattedDate = computed(() => {
-  // TODO: Format the actual date from the API
-  // For now, using placeholder
-  return '3 Jan 2025'
 })
 
 const formattedDuration = computed(() => {

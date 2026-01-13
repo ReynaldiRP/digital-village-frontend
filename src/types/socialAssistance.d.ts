@@ -1,3 +1,5 @@
+type SocialAssistanceStatus = 'menunggu' | 'diterima' | 'ditolak'
+
 export interface SocialAssistanceMaster {
   id: string
   thumbnail: string
@@ -7,6 +9,7 @@ export interface SocialAssistanceMaster {
   provider: string
   description: string
   is_available: number // 0 | 1
+  applied_at: string
 }
 
 export interface SocialAssistance {

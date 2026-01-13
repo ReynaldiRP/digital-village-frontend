@@ -20,9 +20,7 @@
         <img :src="assistanceIcon" alt="icon" />
       </div>
       <div class="flex flex-col gap-[6px] w-full">
-        <p class="font-semibold text-lg leading-5">
-          {{ formattedAmount }}
-        </p>
+        <p class="font-semibold text-lg leading-5">Rp.{{ formattedAmount }}</p>
         <p class="font-medium text-sm text-desa-secondary">{{ assistanceTypeLabel }}</p>
       </div>
       <div
@@ -39,9 +37,7 @@
 
     <div class="flex items-center justify-between">
       <p class="font-medium text-sm text-desa-secondary">Nominal Pengajuan:</p>
-      <p class="font-medium leading-5 text-desa-red">
-        {{ formattedRequestAmount }}
-      </p>
+      <p class="font-medium leading-5 text-desa-red">Rp.{{ formattedRequestAmount }}</p>
     </div>
   </div>
 </template>
@@ -49,7 +45,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SocialAssistance } from '@/types/socialAssistance'
-import { formatRupiah } from '@/helpers/format'
+import { formatRupiah, formatDate } from '@/helpers/format'
 
 interface Props {
   socialAssistance: SocialAssistance
@@ -71,9 +67,7 @@ const badgeClass = computed(() => {
 })
 
 const formattedDate = computed(() => {
-  // TODO: Format the actual date from the API
-  // For now, using placeholder
-  return 'Tue, 31 Dec 2024'
+  return formatDate(props.socialAssistance.social_assistance?.applied_at)
 })
 
 const assistanceIcon = computed(() => {
