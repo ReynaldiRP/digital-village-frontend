@@ -22,68 +22,6 @@
           <p class="font-medium leading-5 text-red-700">{{ auth.errors.message }}</p>
         </div>
       </header>
-      <section id="Select" class="gap-6 grid grid-cols-2">
-        <div
-          class="group p-5 rounded-2xl bg-white ring-desa-background hover:bg-desa-foreshadow has-[:checked]:bg-desa-foreshadow has-[:checked]:ring-desa-dark-green relative flex items-center justify-between ring-[1px] transition-all duration-300"
-        >
-          <input
-            id="Kepala-Desa"
-            required
-            type="radio"
-            name="role"
-            class="peer left-0 right-0 top-0 bottom-0 absolute z-50 opacity-0"
-            value="admin"
-            v-model="form.role"
-          />
-          <p
-            class="font-medium leading-5 text-desa-secondary group-hover:text-desa-dark-green group-has-[:checked]:text-desa-dark-green transition-all duration-300"
-          >
-            Kepala Desa
-          </p>
-          <div class="relative">
-            <img
-              src="@/assets/images/icons/crown-secondary-green.svg"
-              alt="icon"
-              class="absolute h-[24px] w-[24px] shrink-0 transition-all duration-300 group-hover:opacity-0 group-has-[:checked]:opacity-0"
-            />
-            <img
-              src="@/assets/images/icons/crown-dark-green.svg"
-              alt="icon"
-              class="h-[24px] w-[24px] shrink-0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-has-[:checked]:opacity-100"
-            />
-          </div>
-        </div>
-        <div
-          class="group p-5 rounded-2xl bg-white ring-desa-background hover:bg-desa-foreshadow has-[:checked]:bg-desa-foreshadow has-[:checked]:ring-desa-dark-green relative flex items-center justify-between ring-[1px] transition-all duration-300"
-        >
-          <input
-            id="Kepala-Rumah"
-            required
-            type="radio"
-            name="role"
-            class="peer left-0 right-0 top-0 bottom-0 absolute z-50 opacity-0"
-            value="head-of-family"
-            v-model="form.role"
-          />
-          <p
-            class="font-medium leading-5 text-desa-secondary group-hover:text-desa-dark-green group-has-[:checked]:text-desa-dark-green transition-all duration-300"
-          >
-            Kepala Rumah
-          </p>
-          <div class="relative">
-            <img
-              src="@/assets/images/icons/profile-circle-secondary-green.svg"
-              alt="icon"
-              class="absolute h-[24px] w-[24px] shrink-0 transition-all duration-300 group-hover:opacity-0 group-has-[:checked]:opacity-0"
-            />
-            <img
-              src="@/assets/images/icons/profile-circle-dark-green.svg"
-              alt="icon"
-              class="h-[24px] w-[24px] shrink-0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-has-[:checked]:opacity-100"
-            />
-          </div>
-        </div>
-      </section>
       <section id="Inputs" class="flex flex-col gap-[32px]">
         <div id="Email-Address" class="gap-4 flex flex-col">
           <h2 class="font-medium leading-5 text-desa-secondary">Email Address</h2>
@@ -127,7 +65,6 @@
 <script setup lang="ts">
 import Input from '@/components/ui/BaseInput.vue'
 import { onMounted, reactive } from 'vue'
-
 import EmailIcon from '@/assets/images/icons/user-secondary-green.svg'
 import EmailFilledIcon from '@/assets/images/icons/user-black.svg'
 import PasswordIcon from '@/assets/images/icons/key-secondary-green.svg'
@@ -135,6 +72,7 @@ import PasswordFilledIcon from '@/assets/images/icons/key-black.svg'
 import { useAuthStore } from '@/stores/auth'
 import Button from '@/components/ui/BaseButton.vue'
 import { toast } from 'vue3-toastify'
+
 const auth = useAuthStore()
 
 onMounted(() => {
@@ -144,7 +82,6 @@ onMounted(() => {
 })
 
 const form = reactive({
-  role: '',
   email: '',
   password: '',
 })

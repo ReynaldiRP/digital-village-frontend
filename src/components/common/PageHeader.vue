@@ -68,6 +68,7 @@
             </button>
             <button
               class="flex items-center h-14 rounded-2xl py-3 px-8 gap-[10px] bg-desa-red w-full"
+              @click="handleDelete"
             >
               <img
                 src="@/assets/images/icons/trash-white.svg"
@@ -108,6 +109,9 @@ withDefaults(defineProps<Props>(), {
 
 const route = useRoute()
 const isModalOpen = ref(false)
+const emit = defineEmits<{
+  (e: 'delete'): void
+}>()
 
 const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value
@@ -137,6 +141,11 @@ watch(isModalOpen, async (newValue) => {
     document.removeEventListener('click', closeModalOnClickOutside)
   }
 })
+
+const handleDelete = () => {
+  emit('delete')
+  toggleModal()
+}
 </script>
 
 <style scoped></style>

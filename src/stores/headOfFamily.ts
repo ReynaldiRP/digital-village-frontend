@@ -1,6 +1,7 @@
 import type { FilterOptions } from '@/components/head-of-family/FilterBar.vue'
 import { handleError } from '@/helpers/errorHelper'
 import axiosInstance from '@/plugins/axios'
+import router from '@/router'
 import type { ApiResponse } from '@/types'
 import type { HeadOfFamily, HeadOfFamilyPaginatedData, MetaData } from '@/types/headOfFamily'
 import axios from 'axios'
@@ -110,6 +111,28 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     }
   }
 
+  const deleteHeadOfFamilyById = async (id: string) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const response = await axiosInstance.delete<ApiResponse<null>>(`/head-of-families/${id}`)
+      success.value = response.data.message
+      router.push({ name: 'head-of-family' })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     headOfFamilies,
     headOfFamily,
@@ -121,5 +144,6 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     filters,
     fetchHeadOfFamilies,
     fetchHeadOfFamilyById,
+    deleteHeadOfFamilyById
   }
 })

@@ -103,7 +103,6 @@ const isOpen = ref(isChildActive.value)
 
 watch(isChildActive, () => {
   isOpen.value = isChildActive.value
-  console.log(isOpen.value)
 })
 </script>
 

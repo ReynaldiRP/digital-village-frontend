@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeMount } from 'vue'
+import { ref, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import { useHeadOfFamilyStore } from '@/stores/headOfFamily'
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
@@ -45,15 +45,33 @@ import FilterBar, { type FilterOptions } from '@/components/head-of-family/Filte
 import BaseLoading from '@/components/ui/BaseLoading.vue'
 import BaseEmptyState from '@/components/ui/BaseEmptyState.vue'
 import debounce from 'lodash.debounce'
+import { toast } from 'vue3-toastify'
 
 const store = useHeadOfFamilyStore()
-const { headOfFamilies, meta, loading, search, filters } = storeToRefs(store)
+const { headOfFamilies, meta, loading, search, filters, success } = storeToRefs(store)
 const { fetchHeadOfFamilies } = store
 const route = useRoute()
 const router = useRouter()
 
 const entriesPerPage = ref(5)
 const currentPage = ref(1)
+
+onBeforeMount(() => {
+  debounceFetch.cancel()
+})
+
+onMounted(async () => {
+  if (success.value !== '' && success.value !== null) {
+    toast.success(success.value)
+  }
+
+  initializeFromUrl()
+  await fetchHeadOfFamilies(entriesPerPage.value, currentPage.value, filters.value)
+})
+
+onUnmounted(() => {
+  success.value = ''
+})
 
 // Initialize from URL on mount
 const initializeFromUrl = () => {
@@ -127,15 +145,6 @@ const handleFilterApply = (appliedFilters: FilterOptions) => {
 // Watch for changes and refetch data
 watch([search, entriesPerPage, currentPage], () => {
   debounceFetch()
-})
-
-onBeforeMount(() => {
-  debounceFetch.cancel()
-})
-
-onMounted(async () => {
-  initializeFromUrl()
-  await fetchHeadOfFamilies(entriesPerPage.value, currentPage.value, filters.value)
 })
 </script>
 

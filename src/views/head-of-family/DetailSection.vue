@@ -1,6 +1,11 @@
 <template>
   <div>
-    <PageHeader title="Manage Kepala Rumah" show-delete-button :breadcrumbs="breadcrumbs" />
+    <PageHeader
+      title="Manage Kepala Rumah"
+      show-delete-button
+      :breadcrumbs="breadcrumbs"
+      @delete="handleDelete(headOfFamily.id)"
+    />
     <BaseLoading v-if="loading" />
     <div v-else-if="headOfFamily" class="flex gap-[14px] mt-4">
       <div class="flex flex-col w-[calc(525/1000*100%)] shrink-0 gap-[14px]">
@@ -53,6 +58,10 @@ onMounted(async () => {
     await headOfFamilyStore.fetchHeadOfFamilyById(id)
   }
 })
+
+const handleDelete = async (id: string) => {
+  await headOfFamilyStore.deleteHeadOfFamilyById(id)
+}
 </script>
 
 <style scoped></style>

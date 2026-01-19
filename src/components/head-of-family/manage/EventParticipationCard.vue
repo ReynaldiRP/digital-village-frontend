@@ -52,7 +52,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-console.log(props.event)
 
 const formattedDate = computed(() => {
   return formatDate(props.event.event?.date)
