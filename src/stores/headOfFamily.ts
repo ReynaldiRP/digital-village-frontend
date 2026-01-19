@@ -8,6 +8,7 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+
 export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   const headOfFamilies = ref<HeadOfFamily[]>([])
   const headOfFamily = ref<HeadOfFamily>(null as unknown as HeadOfFamily)
@@ -15,12 +16,19 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   const loading = ref(false)
   const success = ref<string>('')
   const errors = ref<Record<string, string>>({})
-  const search = ref<string>('')
-  const filters = ref<FilterOptions>()
 
+  /**
+   * Fetch paginated list of head of families
+   *
+   * @param rowPerPage - Number of items per page
+   * @param page - Current page number
+   * @param searchQuery - Search term for name or NIK
+   * @param appliedFilters - Filter options (gender, status, etc.)
+   */
   const fetchHeadOfFamilies = async (
     rowPerPage: number = 5,
     page: number = 1,
+    searchQuery: string = '',
     appliedFilters: FilterOptions | null = null,
   ) => {
     loading.value = true
@@ -31,13 +39,11 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
         page: page.toString(),
       })
 
-      if (search.value && search.value.length) {
-        params.append('search', search.value)
+      if (searchQuery && searchQuery.length) {
+        params.append('search', searchQuery)
       }
 
-      // Handle filter parameters in backend's expected format: filters[key]=value
       if (appliedFilters) {
-        // Handle nested family_members range - filters[family_count_range][min/max]
         if (appliedFilters.family_members) {
           if (appliedFilters.family_members.min !== null) {
             params.append(
@@ -53,7 +59,6 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
           }
         }
 
-        // Handle simple filter values - filters[key]=value
         if (appliedFilters.gender) {
           params.append('filters[gender]', appliedFilters.gender)
         }
@@ -90,6 +95,11 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     }
   }
 
+  /**
+   * Fetch a single head of family by ID
+   *
+   * @param id - Head of family ID
+   */
   const fetchHeadOfFamilyById = async (id: string) => {
     loading.value = true
     errors.value = {}
@@ -111,6 +121,11 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     }
   }
 
+  /**
+   * Delete a head of family by ID
+   *
+   * @param id - Head of family ID to delete
+   */
   const deleteHeadOfFamilyById = async (id: string) => {
     loading.value = true
     errors.value = {}
@@ -140,10 +155,8 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading,
     success,
     errors,
-    search,
-    filters,
     fetchHeadOfFamilies,
     fetchHeadOfFamilyById,
-    deleteHeadOfFamilyById
+    deleteHeadOfFamilyById,
   }
 })
