@@ -14,10 +14,12 @@
     <p class="font-semibold text-lg">{{ socialAssistance.social_assistance?.name }}</p>
 
     <div class="flex items-center gap-3">
-      <div
-        class="flex size-[52px] shrink-0 items-center justify-center rounded-2xl bg-desa-foreshadow"
-      >
-        <img :src="assistanceIcon" alt="icon" />
+      <div class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow overflow-hidden">
+        <img
+          :src="socialAssistance.social_assistance?.thumbnail"
+          class="w-full h-full object-cover"
+          alt="thumbnail"
+        />
       </div>
       <div class="flex flex-col gap-[6px] w-full">
         <p class="font-semibold text-lg leading-5">Rp.{{ formattedAmount }}</p>

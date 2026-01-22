@@ -1,14 +1,8 @@
 <template>
   <div>
     <div class="card flex items-center w-full gap-3">
-      <div
-        class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow items-center justify-center"
-      >
-        <img
-          src="@/assets/images/icons/money-dark-green.svg"
-          class="flex size-9 shrink-0"
-          alt="icon"
-        />
+      <div class="flex size-[72px] shrink-0 rounded-2xl bg-desa-foreshadow overflow-hidden">
+        <img :src="data.thumbnail" class="w-full h-full object-cover" alt="thumbnail" />
       </div>
       <div class="flex flex-col gap-[6px] w-full">
         <p class="font-semibold text-xl leading-[25px]">Rp.{{ formatRupiah(data.amount) }}</p>

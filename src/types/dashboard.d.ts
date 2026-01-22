@@ -20,6 +20,7 @@ export interface RecentDevelopmentApplicantData {
   applicant_name: string
   project_name: string
   thumbnail: string
+  applicant_photo: string
   amount_requested: number
   status: string
   applied_at: string
