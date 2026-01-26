@@ -29,7 +29,9 @@
             placeholder="Masukan nama lengkap"
             :icon-inactive="UserSecondaryGreenIcon"
             :icon-active="UserBlackIcon"
-            :validation-state="getValidationState('name')"
+            :validation-state="getFieldValidationState('name')"
+            :error-message="errors.name"
+            @blur="handleBlur('name')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -38,11 +40,13 @@
         <BaseFormSection label="Nomor Induk Kependudukan">
           <BaseFormInput
             v-model="form.nik"
-            type="number"
+            type="text"
             placeholder="Ketik NIK"
             :icon-inactive="KeyboardSecondaryGreenIcon"
             :icon-active="KeyboardBlackIcon"
-            :validation-state="getValidationState('nik')"
+            :validation-state="getFieldValidationState('nik')"
+            :error-message="errors.nik"
+            @blur="handleBlur('nik')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -51,11 +55,13 @@
         <BaseFormSection label="Nomor Handphone">
           <BaseFormInput
             v-model="form.phone"
-            type="text"
+            type="tel"
             placeholder="Masukan No. HP yang aktif"
             :icon-inactive="CallSecondaryGreenIcon"
             :icon-active="CallBlackIcon"
-            :validation-state="getValidationState('phone')"
+            :validation-state="getFieldValidationState('phone')"
+            :error-message="errors.phone"
+            @blur="handleBlur('phone')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -68,7 +74,9 @@
             placeholder="Masukan nama pekerjaan"
             :icon-inactive="BriefcaseSecondaryGreenIcon"
             :icon-active="BriefcaseBlackIcon"
-            :validation-state="getValidationState('occupation')"
+            :validation-state="getFieldValidationState('occupation')"
+            :error-message="errors.occupation"
+            @blur="handleBlur('occupation')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -80,7 +88,9 @@
             placeholder="Masukan tanggal lahir"
             show-age
             age-label="Umur"
-            :validation-state="getValidationState('birthdate')"
+            :validation-state="getFieldValidationState('birthdate')"
+            :error-message="errors.birthdate"
+            @blur="handleBlur('birthdate')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -112,8 +122,9 @@
             :icon-inactive="SmsSecondaryGreenIcon"
             :icon-active="SmsBlackIcon"
             :icon-error="SmsRedIcon"
-            :validation-state="getValidationState('email')"
+            :validation-state="getFieldValidationState('email')"
             :error-message="errors.email"
+            @blur="handleBlur('email')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -126,7 +137,10 @@
             placeholder="Masukan Password"
             :icon-inactive="KeySecondaryGreenIcon"
             :icon-active="KeyBlackIcon"
-            :validation-state="getValidationState('password')"
+            :icon-error="KeySecondaryGreenIcon"
+            :validation-state="getFieldValidationState('password')"
+            :error-message="errors.password"
+            @blur="handleBlur('password')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -141,7 +155,7 @@
             </div>
           </router-link>
           <button
-            :disabled="!isFormValid"
+            :disabled="!meta.valid"
             type="submit"
             class="py-[18px] rounded-2xl disabled:bg-desa-grey w-[180px] text-center flex justify-center font-medium text-white bg-desa-dark-green transition-all duration-300"
           >
@@ -154,7 +168,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import {
   BaseFormSection,
@@ -164,6 +177,8 @@ import {
   BaseFormDateInput,
   type RadioOption,
 } from '@/components/form'
+import { useZodForm } from '@/composables/useZodForm'
+import { headOfFamilyFormSchema, headOfFamilyInitialValues } from '@/schemas'
 
 // Icons
 import UserSecondaryGreenIcon from '@/assets/images/icons/user-secondary-green.svg'
@@ -188,22 +203,21 @@ import ProfileDarkGreenIcon from '@/assets/images/icons/profile-dark-green.svg'
 import Profile2userSecondaryGreenIcon from '@/assets/images/icons/profile-2user-secondary-green.svg'
 import Profile2userDarkGreenIcon from '@/assets/images/icons/profile-2user-dark-green.svg'
 
-// Form State
-const form = reactive({
-  photo: null as File | null,
-  name: '',
-  nik: '',
-  phone: '',
-  occupation: '',
-  birthdate: '',
-  gender: '',
-  maritalStatus: '',
-  email: '',
-  password: '',
-})
-
-const errors = reactive({
-  email: '',
+// Form Setup with Zod
+const {
+  values: form,
+  errors,
+  meta,
+  getFieldValidationState,
+  handleBlur,
+  handleSubmit,
+} = useZodForm({
+  schema: headOfFamilyFormSchema,
+  initialValues: headOfFamilyInitialValues,
+  onSubmit: (values) => {
+    console.log('Form submitted:', values)
+    // TODO: Implement API call to create head of family
+  },
 })
 
 // Radio Options
@@ -236,44 +250,6 @@ const maritalStatusOptions: RadioOption[] = [
     iconActive: Profile2userDarkGreenIcon,
   },
 ]
-
-// Validation Helper
-const getValidationState = (field: keyof typeof form): 'valid' | 'invalid' | 'default' => {
-  const value = form[field]
-
-  // Check for specific error
-  if (field === 'email' && errors.email) {
-    return 'invalid'
-  }
-
-  // If field has value, mark as valid
-  if (value && String(value).length > 0) {
-    return 'valid'
-  }
-
-  return 'default'
-}
-
-// Form Validation
-const isFormValid = computed(() => {
-  return (
-    form.name.trim().length > 0 &&
-    form.nik !== '' &&
-    form.phone.trim().length > 0 &&
-    form.occupation.trim().length > 0 &&
-    form.birthdate.length > 0 &&
-    form.gender.length > 0 &&
-    form.maritalStatus.length > 0 &&
-    form.email.trim().length > 0 &&
-    form.password.length > 0
-  )
-})
-
-// Form Submit
-const handleSubmit = () => {
-  // TODO: Implement form submission
-  console.log('Form submitted:', form)
-}
 </script>
 
 <style scoped></style>

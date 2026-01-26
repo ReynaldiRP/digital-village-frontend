@@ -13,23 +13,26 @@
         :placeholder="placeholder"
         :class="inputClasses"
         @input="handleInput"
+        @blur="handleBlur"
       />
       <!-- Left Icon Container -->
       <div class="absolute transform -translate-y-1/2 top-1/2 left-4 flex size-6 shrink-0">
+        <!-- Inactive icon: shown when placeholder is shown AND not invalid -->
         <img
           :src="iconInactive"
           class="size-6 hidden group-has-[:placeholder-shown]:flex group-[.invalid]:!hidden"
           alt="icon"
         />
+        <!-- Active icon: shown when has value AND not invalid -->
         <img
           :src="iconActive"
-          class="size-6 flex group-has-[:placeholder-shown]:hidden group-[.invalid]:hidden"
+          :class="['size-6 group-has-[:placeholder-shown]:hidden', 'group-[.invalid]:hidden']"
           alt="icon"
         />
+        <!-- Error icon: shown when invalid - uses iconError if provided, otherwise iconActive with red filter -->
         <img
-          v-if="iconError"
-          :src="iconError"
-          class="size-6 hidden group-[.invalid]:flex"
+          :src="iconError || iconActive"
+          :class="['size-6 hidden group-[.invalid]:flex', !iconError ? 'icon-to-red' : '']"
           alt="icon"
         />
       </div>
@@ -80,7 +83,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
+  (e: 'blur'): void
 }>()
+
+const handleBlur = () => {
+  emit('blur')
+}
 
 const inputClasses = computed(() => {
   const base =
@@ -104,4 +112,10 @@ const handleInput = (event: Event) => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+/* CSS filter to convert black/dark icons to red (#EF4444 / desa-red) */
+.icon-to-red {
+  filter: brightness(0) saturate(100%) invert(36%) sepia(95%) saturate(1639%) hue-rotate(338deg)
+    brightness(93%) contrast(95%);
+}
+</style>
