@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import LoginSection from '@/views/auth/LoginSection.vue'
 import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
+import CreateSection from '@/views/head-of-family/CreateSection.vue'
 import DetailSection from '@/views/head-of-family/DetailSection.vue'
 import IndexSection from '@/views/head-of-family/IndexSection.vue'
 import { storeToRefs } from 'pinia'
@@ -42,6 +43,12 @@ const router = createRouter({
           component: () => DetailSection,
           meta: { requiresAuth: true, permission: 'head-of-family-read' },
         },
+        {
+          path: 'head-of-family/create',
+          name: 'head-of-family-create',
+          component: () => CreateSection,
+          meta: { requiresAuth: true, permission: 'head-of-family-create' },
+        }
       ],
     },
     {

@@ -12,12 +12,12 @@
           <span v-if="breadcrumbs && index < breadcrumbs.length - 1">/</span>
         </template>
       </div>
-      <h1 class="font-semibold text-2xl">Manage Kepala Rumah</h1>
+      <h1 class="font-semibold text-2xl">{{ title }}</h1>
     </div>
     <h1 v-else class="font-semibold text-2xl">{{ title }}</h1>
-    <a
+    <router-link
       v-if="showAddButton"
-      :href="addButtonRoute"
+      :to="addButtonRoute"
       class="flex items-center rounded-2xl py-4 px-6 gap-[10px] bg-desa-dark-green"
     >
       <img
@@ -26,7 +26,7 @@
         alt="icon"
       />
       <p class="font-medium text-white">{{ addButtonText }}</p>
-    </a>
+    </router-link>
     <button
       v-if="showDeleteButton"
       @click="toggleModal"

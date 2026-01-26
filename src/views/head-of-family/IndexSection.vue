@@ -4,7 +4,7 @@
       title="Kepala Rumah"
       show-add-button
       add-button-text="Add New"
-      add-button-route="kd-kepala-rumah-add.html"
+      add-button-route="head-of-family/create"
     />
 
     <section id="List-Kepala-Rumah" class="flex flex-col gap-[14px] mt-4">
