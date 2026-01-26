@@ -6,6 +6,7 @@ import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
 import DetailSection from '@/views/head-of-family/DetailSection.vue'
 import IndexSection from '@/views/head-of-family/IndexSection.vue'
+import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 
 declare module 'vue-router' {
@@ -66,29 +67,25 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
+  const { user } = storeToRefs(auth)
 
   if (to.meta.requiresAuth) {
-    if (auth.token) {
-      try {
-        if (!auth.user) {
-          await auth.checkAuth()
-        }
-
-        const userPermissions = auth.user?.permissions || []
-
-        if (to.meta.permission && !userPermissions.includes(to.meta.permission as string)) {
-          next({ name: 'Error 403' })
-          return
-        }
-
-        next()
-      } catch (error) {
+    if (!user.value) {
+      const authenticatedUser = await auth.checkAuth()
+      if (!authenticatedUser) {
         next({ name: 'login' })
+        return
       }
-    } else {
-      next({ name: 'login' })
     }
-  } else if (to.meta.requiresUnauth && auth.token) {
+
+    const userPermissions = user.value?.permissions || []
+    if (to.meta.permission && !userPermissions.includes(to.meta.permission as string)) {
+      next({ name: 'Error 403' })
+      return
+    }
+
+    next()
+  } else if (to.meta.requiresUnauth && user.value) {
     next({ name: 'dashboard' })
   } else {
     next()

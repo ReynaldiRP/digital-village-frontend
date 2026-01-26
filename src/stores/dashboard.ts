@@ -21,7 +21,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const fetchDashboardData = async () => {
     loading.value = true
     try {
-      const response = await axiosInstance.get<DashboardResponse>('/dashboard/get-dashboard-data')
+      const response = await axiosInstance.get<DashboardResponse>('/api/dashboard/get-dashboard-data')
       dashboardData.value = response.data.data
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -44,9 +44,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       const response = await axiosInstance.get<{
         message: string
         data: RecentSocialAssistanceData[]
-      }>('/dashboard/get-recent-social-assistances')
-
-      console.log(response.data.data)
+      }>('/api/dashboard/get-recent-social-assistances')
 
       recentSocialAssistanceData.value = response.data.data
     } catch (error: unknown) {
@@ -70,7 +68,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       const response = await axiosInstance.get<{
         message: string
         data: RecentDevelopmentApplicantData[]
-      }>('/dashboard/get-recent-development-applicants')
+      }>('/api/dashboard/get-recent-development-applicants')
       recentDevelopmentApplicantData.value = response.data.data
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

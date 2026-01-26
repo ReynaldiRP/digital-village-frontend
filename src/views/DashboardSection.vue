@@ -263,7 +263,7 @@
 import { useDashboardStore } from '@/stores/dashboard'
 import { ArcElement, Chart, DoughnutController, Legend, Tooltip } from 'chart.js'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import CardStatistic from '@/components/dashboard/home/CardStatistic.vue'
 import DatePicker from '@/components/ui/DatePicker.vue'
 import Profil2userForeshadowBackgroundIcon from '@/assets/images/icons/profil-2user-foreshadow-background.svg'
@@ -275,11 +275,7 @@ import Bag2ForeshadowBackgroundIcon from '@/assets/images/icons/bag-2-foreshadow
 import RecentListSection from '@/components/dashboard/home/RecentListSection.vue'
 import RecentSocialAssistanceItem from '@/components/dashboard/home/RecentSocialAssistanceItem.vue'
 import RecentDevelopmentApplicantItem from '@/components/dashboard/home/RecentDevelopmentApplicantItem.vue'
-import { useAuthStore } from '@/stores/auth'
-import { toast } from 'vue3-toastify'
 import BaseEmptyState from '@/components/ui/BaseEmptyState.vue'
-
-const auth = useAuthStore()
 
 const dashboardStore = useDashboardStore()
 const { dashboardData, recentSocialAssistanceData, recentDevelopmentApplicantData } =
@@ -293,18 +289,10 @@ const handleDateSelected = (date: Date) => {
 }
 
 onMounted(async () => {
-  if (auth.success && auth.success.length) {
-    toast.success(auth.success)
-  }
-
   await fetchDashboardData()
   await fetchRecentSocialAssistance()
   await fetchRecentDevelopmentApplicants()
   getResidentsStatistic()
-})
-
-onUnmounted(() => {
-  auth.success = ''
 })
 
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)

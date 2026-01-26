@@ -72,12 +72,6 @@ const formattedDate = computed(() => {
   return formatDate(props.socialAssistance.social_assistance?.applied_at)
 })
 
-const assistanceIcon = computed(() => {
-  // Determine icon based on assistance type
-  // You can extend this logic based on your business rules
-  return '/src/assets/images/icons/money-dark-green.svg'
-})
-
 const assistanceTypeLabel = computed(() => {
   // You can customize this based on the assistance type
   return 'Nominal Pengajuan'

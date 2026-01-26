@@ -2,10 +2,11 @@ import axiosInstance from '@/plugins/axios'
 import type { User, AuthCredentials, AuthResponse, checkAuthResponse } from '@/types/auth'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import Cookies from 'js-cookie'
 import router from '@/router'
 import { handleError } from '@/helpers/errorHelper'
 import axios from 'axios'
+import { toast } from 'vue3-toastify'
+import Cookies from 'js-cookie'
 
 export const useAuthStore = defineStore('user', () => {
   const loading = ref(false)
@@ -17,11 +18,22 @@ export const useAuthStore = defineStore('user', () => {
   const login = async (credentials: AuthCredentials) => {
     loading.value = true
     try {
-      const response = await axiosInstance.post<AuthResponse>('/login', credentials)
+      Cookies.remove('auth_token')
+      token.value = null
+
+      const response = await axiosInstance.post<AuthResponse>('/api/login', credentials)
+     
       token.value = response.data.token
-      Cookies.set('auth_token', token.value)
+      Cookies.set('auth_token', token.value, {
+        expires: 1,
+        secure: false,
+        sameSite: 'lax',
+        path: '/'
+      })
+
       success.value = response.data.message
-      await router.push({ name: 'dashboard' })
+      router.push({ name: 'dashboard' })
+      toast.success(success.value)
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
@@ -42,12 +54,15 @@ export const useAuthStore = defineStore('user', () => {
   const logout = async () => {
     loading.value = true
     try {
-      await axiosInstance.post('/logout')
+      await axiosInstance.post('/api/logout')
+
       token.value = null
-      Cookies.remove('auth_token')
       user.value = null
+      Cookies.remove('auth_token')
+      
       success.value = 'Logout successful'
-      await router.push({ name: 'login' })
+      router.push({ name: 'login' })
+      toast.success(success.value)
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
@@ -58,7 +73,6 @@ export const useAuthStore = defineStore('user', () => {
           message: 'Unexpected error occurred. Please try again later.',
         }
       }
-      console.log(errors.value)
     } finally {
       loading.value = false
     }
@@ -67,17 +81,24 @@ export const useAuthStore = defineStore('user', () => {
   const checkAuth = async (): Promise<User | null> => {
     loading.value = true
     try {
-      const response = await axiosInstance.get<checkAuthResponse>('/me')
+      const response = await axiosInstance.get<checkAuthResponse>('/api/me')
       user.value = response.data.user
       return user.value
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
-        await logout()
+        token.value = null
+        user.value = null
+        Cookies.remove('auth_token')
       }
       return null
     } finally {
       loading.value = false
     }
+  }
+
+  const clearMessages = () => {
+    errors.value = {}
+    success.value = ''
   }
 
   return {
@@ -89,5 +110,6 @@ export const useAuthStore = defineStore('user', () => {
     login,
     logout,
     checkAuth,
+    clearMessages,
   }
 })

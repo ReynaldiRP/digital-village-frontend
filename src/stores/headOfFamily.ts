@@ -74,7 +74,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
       }
 
       const response = await axiosInstance.get<ApiResponse<HeadOfFamilyPaginatedData>>(
-        `/head-of-families/all/paginated?${params.toString()}`,
+        `/api/head-of-families/all/paginated?${params.toString()}`,
       )
 
       headOfFamilies.value = response.data.data.items
@@ -104,7 +104,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading.value = true
     errors.value = {}
     try {
-      const response = await axiosInstance.get<ApiResponse<HeadOfFamily>>(`/head-of-families/${id}`)
+      const response = await axiosInstance.get<ApiResponse<HeadOfFamily>>(`/api/head-of-families/${id}`)
       headOfFamily.value = response.data.data
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -130,7 +130,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading.value = true
     errors.value = {}
     try {
-      const response = await axiosInstance.delete<ApiResponse<null>>(`/head-of-families/${id}`)
+      const response = await axiosInstance.delete<ApiResponse<null>>(`/api/head-of-families/${id}`)
       success.value = response.data.message
       router.push({ name: 'head-of-family' })
     } catch (error) {

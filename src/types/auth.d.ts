@@ -4,6 +4,7 @@ export interface User {
   email: string
   role: string
   permissions: Array<string>
+  token_expired_at: string
 }
 
 export interface AuthCredentials {
