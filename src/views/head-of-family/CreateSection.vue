@@ -7,16 +7,17 @@
         { label: 'Tambah Kepala Rumah Baru', route: `/head-of-family/create` },
       ]"
     />
-    <form class="capitalize mt-4" @submit.prevent="handleSubmit">
+    <form class="capitalize mt-4" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <section class="shrink-0 rounded-3xl p-6 bg-white flex flex-col gap-6 h-fit">
         <!-- Photo Profile -->
         <BaseFormSection label="Profile Kepala Rumah" direction="row">
           <BaseFormFileUpload
-            v-model="form.photo"
+            :model-value="form.profile_picture"
             preview-shape="circle"
             preview-size="medium"
             accept="image/*"
             button-text="Upload"
+            @update:model-value="(file: File | null) => setFieldValue('profile_picture', file)"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -39,14 +40,14 @@
         <!-- NIK -->
         <BaseFormSection label="Nomor Induk Kependudukan">
           <BaseFormInput
-            v-model="form.nik"
+            v-model="form.identify_number"
             type="text"
             placeholder="Ketik NIK"
             :icon-inactive="KeyboardSecondaryGreenIcon"
             :icon-active="KeyboardBlackIcon"
-            :validation-state="getFieldValidationState('nik')"
-            :error-message="errors.nik"
-            @blur="handleBlur('nik')"
+            :validation-state="getFieldValidationState('identify_number')"
+            :error-message="errors.identify_number"
+            @blur="handleBlur('identify_number')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -54,14 +55,14 @@
         <!-- Phone -->
         <BaseFormSection label="Nomor Handphone">
           <BaseFormInput
-            v-model="form.phone"
+            v-model="form.phone_number"
             type="tel"
             placeholder="Masukan No. HP yang aktif"
             :icon-inactive="CallSecondaryGreenIcon"
             :icon-active="CallBlackIcon"
-            :validation-state="getFieldValidationState('phone')"
-            :error-message="errors.phone"
-            @blur="handleBlur('phone')"
+            :validation-state="getFieldValidationState('phone_number')"
+            :error-message="errors.phone_number"
+            @blur="handleBlur('phone_number')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -84,13 +85,13 @@
         <!-- Tanggal Lahir -->
         <BaseFormSection label="Tanggal Lahir" direction="row">
           <BaseFormDateInput
-            v-model="form.birthdate"
+            v-model="form.birth_date"
             placeholder="Masukan tanggal lahir"
             show-age
             age-label="Umur"
-            :validation-state="getFieldValidationState('birthdate')"
-            :error-message="errors.birthdate"
-            @blur="handleBlur('birthdate')"
+            :validation-state="getFieldValidationState('birth_date')"
+            :error-message="errors.birth_date"
+            @blur="handleBlur('birth_date')"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -104,7 +105,7 @@
         <!-- Status -->
         <BaseFormSection label="Status" direction="row">
           <BaseFormRadioGroup
-            v-model="form.maritalStatus"
+            v-model="form.marital_status"
             name="status"
             :options="maritalStatusOptions"
           />
@@ -202,6 +203,9 @@ import ProfileSecondaryGreenIcon from '@/assets/images/icons/profile-secondary-g
 import ProfileDarkGreenIcon from '@/assets/images/icons/profile-dark-green.svg'
 import Profile2userSecondaryGreenIcon from '@/assets/images/icons/profile-2user-secondary-green.svg'
 import Profile2userDarkGreenIcon from '@/assets/images/icons/profile-2user-dark-green.svg'
+import { useHeadOfFamilyStore } from '@/stores/headOfFamily'
+
+const headOfFamily = useHeadOfFamilyStore()
 
 // Form Setup with Zod
 const {
@@ -211,12 +215,13 @@ const {
   getFieldValidationState,
   handleBlur,
   handleSubmit,
+  setFieldValue,
 } = useZodForm({
   schema: headOfFamilyFormSchema,
   initialValues: headOfFamilyInitialValues,
-  onSubmit: (values) => {
+  onSubmit: async (values) => {
     console.log('Form submitted:', values)
-    // TODO: Implement API call to create head of family
+    await headOfFamily.createNewHeadOfFamily(values)
   },
 })
 

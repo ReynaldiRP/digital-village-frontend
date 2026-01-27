@@ -1,6 +1,7 @@
 import MainLayout from '@/layouts/app/MainLayout.vue'
 import AuthenticateLayout from '@/layouts/auth/AuthenticateLayout.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useToastStore } from '@/stores/toast'
 import LoginSection from '@/views/auth/LoginSection.vue'
 import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
@@ -48,7 +49,7 @@ const router = createRouter({
           name: 'head-of-family-create',
           component: () => CreateSection,
           meta: { requiresAuth: true, permission: 'head-of-family-create' },
-        }
+        },
       ],
     },
     {
@@ -97,6 +98,15 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next()
   }
+})
+
+// Show pending toasts after navigation completes
+router.afterEach(() => {
+  const toastStore = useToastStore()
+  // Small delay to ensure the new page is rendered
+  setTimeout(() => {
+    toastStore.showPendingToasts()
+  }, 100)
 })
 
 export default router

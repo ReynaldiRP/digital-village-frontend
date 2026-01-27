@@ -46,7 +46,7 @@
       <div class="gap-4 flex items-center">
         <div class="size-14 bg-desa-foreshadow flex shrink-0 overflow-hidden rounded-full">
           <img
-            src="@/assets/images/photos/photo-1.png"
+            :src="user?.profile_picture_url || '@/assets/images/photos/photo-1.png'"
             class="h-full w-full object-cover"
             alt="photo"
           />

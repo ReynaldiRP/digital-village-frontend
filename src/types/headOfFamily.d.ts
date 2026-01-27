@@ -55,3 +55,16 @@ export interface HeadOfFamilyPaginatedData {
   items: HeadOfFamily[]
   meta: MetaData
 }
+
+export interface FormHeadOfFamily {
+  name: string
+  email: string
+  password: string
+  identify_number: string
+  phone_number: string
+  occupation: string
+  birth_date: date
+  gender: 'male' | 'female'
+  marital_status: 'single' | 'married'
+  profile_picture?: File | null
+}

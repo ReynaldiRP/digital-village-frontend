@@ -3,11 +3,16 @@ import { handleError } from '@/helpers/errorHelper'
 import axiosInstance from '@/plugins/axios'
 import router from '@/router'
 import type { ApiResponse } from '@/types'
-import type { HeadOfFamily, HeadOfFamilyPaginatedData, MetaData } from '@/types/headOfFamily'
+import type {
+  FormHeadOfFamily,
+  HeadOfFamily,
+  HeadOfFamilyPaginatedData,
+  MetaData,
+} from '@/types/headOfFamily'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-
+import { toast } from 'vue3-toastify'
 
 export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   const headOfFamilies = ref<HeadOfFamily[]>([])
@@ -104,7 +109,9 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading.value = true
     errors.value = {}
     try {
-      const response = await axiosInstance.get<ApiResponse<HeadOfFamily>>(`/api/head-of-families/${id}`)
+      const response = await axiosInstance.get<ApiResponse<HeadOfFamily>>(
+        `/api/head-of-families/${id}`,
+      )
       headOfFamily.value = response.data.data
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -116,6 +123,64 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
           message: 'Unexpected error occurred. Please try again later.',
         }
       }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * TODO: fix the upload files issue
+   * Create a new head of family
+   * @param formData - Data for the new head of family
+   *
+   * @returns Promise<void>
+   */
+  const createNewHeadOfFamily = async (formData: FormHeadOfFamily) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const data = new FormData()
+
+      // Append all fields
+      data.append('name', formData.name)
+      data.append('identify_number', formData.identify_number)
+      data.append('phone_number', formData.phone_number)
+      data.append('occupation', formData.occupation)
+      data.append('birth_date', formData.birth_date)
+      data.append('gender', formData.gender)
+      data.append('marital_status', formData.marital_status)
+      data.append('email', formData.email)
+      data.append('password', formData.password)
+
+      // Append file only if it exists
+      if (formData.profile_picture instanceof File) {
+        data.append('profile_picture', formData.profile_picture)
+      }
+
+      const response = await axiosInstance.post<ApiResponse<HeadOfFamily>>(
+        '/api/head-of-families',
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+
+      success.value = response.data.message
+      router.push({ name: 'head-of-family' })
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+
+      toast.error(errors.value.message || 'Failed to create head of family.')
     } finally {
       loading.value = false
     }
@@ -157,6 +222,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     errors,
     fetchHeadOfFamilies,
     fetchHeadOfFamilyById,
+    createNewHeadOfFamily,
     deleteHeadOfFamilyById,
   }
 })

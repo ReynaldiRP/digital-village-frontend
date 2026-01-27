@@ -18,10 +18,17 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const errors = ref<Record<string, string>>({})
   const success = ref<string>('')
 
+  /**
+   * Fetch dashboard data
+   *
+   * @return void
+   */
   const fetchDashboardData = async () => {
     loading.value = true
     try {
-      const response = await axiosInstance.get<DashboardResponse>('/api/dashboard/get-dashboard-data')
+      const response = await axiosInstance.get<DashboardResponse>(
+        '/api/dashboard/get-dashboard-data',
+      )
       dashboardData.value = response.data.data
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -38,6 +45,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
     }
   }
 
+  /**
+   * Fetch recent social assistance data
+   *
+   * @return void
+   */
   const fetchRecentSocialAssistance = async () => {
     loading.value = true
     try {
@@ -62,6 +74,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
     }
   }
 
+  /**
+   * Fetch recent development applicants data
+   *
+   * @return void
+   */
   const fetchRecentDevelopmentApplicants = async () => {
     loading.value = true
     try {

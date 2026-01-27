@@ -7,6 +7,7 @@ import { handleError } from '@/helpers/errorHelper'
 import axios from 'axios'
 import { toast } from 'vue3-toastify'
 import Cookies from 'js-cookie'
+import { useToastStore } from '@/stores/toast'
 
 export const useAuthStore = defineStore('user', () => {
   const loading = ref(false)
@@ -22,18 +23,22 @@ export const useAuthStore = defineStore('user', () => {
       token.value = null
 
       const response = await axiosInstance.post<AuthResponse>('/api/login', credentials)
-     
+
       token.value = response.data.token
       Cookies.set('auth_token', token.value, {
         expires: 1,
         secure: false,
         sameSite: 'lax',
-        path: '/'
+        path: '/',
       })
 
       success.value = response.data.message
+
+      // Queue toast to show after navigation
+      const toastStore = useToastStore()
+      toastStore.queueSuccess(success.value)
+
       router.push({ name: 'dashboard' })
-      toast.success(success.value)
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
@@ -59,10 +64,14 @@ export const useAuthStore = defineStore('user', () => {
       token.value = null
       user.value = null
       Cookies.remove('auth_token')
-      
+
       success.value = 'Logout successful'
+
+      // Queue toast to show after navigation
+      const toastStore = useToastStore()
+      toastStore.queueSuccess(success.value)
+
       router.push({ name: 'login' })
-      toast.success(success.value)
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {

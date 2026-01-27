@@ -1,6 +1,7 @@
 // src/services/api.ts
 import router from '@/router'
 import { useAuthStore } from '@/stores/auth'
+import { useToastStore } from '@/stores/toast'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { storeToRefs } from 'pinia'
@@ -49,8 +50,10 @@ axiosInstance.interceptors.response.use(
         auth.token = null
         Cookies.remove('auth_token')
 
+        const toastStore = useToastStore()
+        toastStore.queueError('Session expired. Please log in again.')
+
         router.push({ name: 'login', query: { expired: 'true' } })
-        toast.error('Session expired. Please log in again.')
 
         return Promise.reject(error)
       }

@@ -27,7 +27,7 @@ export const toTypedSchema = <T extends z.ZodType>(zodSchema: T) => {
 
 // Raw Zod schema for head of family form
 export const headOfFamilyFormSchema = z.object({
-  photo: z
+  profile_picture: z
     .instanceof(File)
     .nullable()
     .optional()
@@ -44,13 +44,13 @@ export const headOfFamilyFormSchema = z.object({
     .max(100, 'Nama maksimal 100 karakter')
     .regex(/^[a-zA-Z\s'.]+$/, 'Nama hanya boleh berisi huruf, spasi, titik, dan apostrof'),
 
-  nik: z
+  identify_number: z
     .string()
     .min(1, 'NIK wajib diisi')
     .length(16, 'NIK harus 16 digit')
     .regex(/^\d+$/, 'NIK hanya boleh berisi angka'),
 
-  phone: z
+  phone_number: z
     .string()
     .min(1, 'Nomor HP wajib diisi')
     .min(10, 'Nomor HP minimal 10 digit')
@@ -63,7 +63,7 @@ export const headOfFamilyFormSchema = z.object({
     .min(2, 'Pekerjaan minimal 2 karakter')
     .max(100, 'Pekerjaan maksimal 100 karakter'),
 
-  birthdate: z
+  birth_date: z
     .string()
     .min(1, 'Tanggal lahir wajib diisi')
     .refine((date) => {
@@ -80,7 +80,7 @@ export const headOfFamilyFormSchema = z.object({
 
   gender: z.enum(['male', 'female'], 'Jenis kelamin wajib dipilih'),
 
-  maritalStatus: z.enum(['single', 'married'], 'Status wajib dipilih'),
+  marital_status: z.enum(['single', 'married'], 'Status wajib dipilih'),
 
   email: z
     .string()
@@ -106,14 +106,14 @@ export type HeadOfFamilyFormValues = z.infer<typeof headOfFamilyFormSchema>
 
 // Initial form values
 export const headOfFamilyInitialValues: HeadOfFamilyFormValues = {
-  photo: null,
+  profile_picture: null,
   name: '',
-  nik: '',
-  phone: '',
+  identify_number: '',
+  phone_number: '',
   occupation: '',
-  birthdate: '',
+  birth_date: '',
   gender: 'male',
-  maritalStatus: 'single',
+  marital_status: 'single',
   email: '',
   password: '',
 }

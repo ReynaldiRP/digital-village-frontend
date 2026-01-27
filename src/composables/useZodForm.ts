@@ -22,6 +22,10 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
   // Form values - reactive
   const values = reactive({ ...initialValues }) as FormValues
 
+  // Store File objects separately to prevent Vue's reactive proxy from breaking them
+  // Vue's reactive() deeply proxies objects, which breaks File instances
+  const fileValues = new Map<string, File>()
+
   // Field errors
   const errors = reactive<Record<string, string>>({})
 
@@ -33,11 +37,27 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
     fieldMeta[key] = { touched: false, dirty: false, valid: false }
   }
 
+  // Get values with File objects restored from separate storage
+  const getValuesWithFiles = (): FormValues => {
+    const result = { ...values } as Record<string, unknown>
+
+    // Restore File objects from separate storage
+    for (const [key, file] of fileValues.entries()) {
+      result[key] = file
+    }
+
+    return result as FormValues
+  }
+
   // Validate single field using full schema
   const validateField = async (field: FormKeys): Promise<boolean> => {
     const fieldKey = field as string
+
+    // Get values with File objects restored for validation
+    const valuesWithFiles = getValuesWithFiles()
+
     // Validate the entire form but only report error for this field
-    const result = await schema.safeParseAsync(values)
+    const result = await schema.safeParseAsync(valuesWithFiles)
 
     if (result.success) {
       errors[fieldKey] = ''
@@ -64,7 +84,8 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
 
   // Validate all fields
   const validateForm = async (): Promise<boolean> => {
-    const result = await schema.safeParseAsync(values)
+    const valuesWithFiles = getValuesWithFiles()
+    const result = await schema.safeParseAsync(valuesWithFiles)
 
     if (result.success) {
       // Clear all errors
@@ -108,10 +129,26 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
     if (meta) meta.touched = true
   }
 
-  // Set field value
+  // Set field value - handles File objects specially
   const setFieldValue = <K extends FormKeys>(field: K, value: FormValues[K]) => {
     const fieldKey = field as string
-    ;(values as Record<string, unknown>)[fieldKey] = value
+
+    // If value is a File, store it separately to prevent proxy issues
+    if (value instanceof File) {
+      fileValues.set(fieldKey, value)
+      // Store a marker in reactive values (for dirty checking, etc.)
+      ;(values as Record<string, unknown>)[fieldKey] = `__file__${value.name}`
+    } else if (value === null && fileValues.has(fieldKey)) {
+      // Clear file if set to null
+      fileValues.delete(fieldKey)
+      ;(values as Record<string, unknown>)[fieldKey] = value
+    } else {
+      // For non-File values, store normally
+      ;(values as Record<string, unknown>)[fieldKey] = value
+      // Clear any previous file value
+      fileValues.delete(fieldKey)
+    }
+
     const meta = fieldMeta[fieldKey]
     if (meta) meta.dirty = true
   }
@@ -143,16 +180,20 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
     }
   }
 
-  // Form meta
+  // Form meta - tracks overall form state
   const meta = computed(() => {
     const allTouched = Object.values(fieldMeta).every((m) => m?.touched)
-    const allValid = Object.values(fieldMeta).every((m) => m?.valid)
     const hasErrors = Object.values(errors).some((e) => e !== '')
+    const isDirty = Object.values(fieldMeta).some((m) => m?.dirty)
+
+    // Check if form is valid by running schema validation synchronously
+    const valuesWithFiles = getValuesWithFiles()
+    const result = schema.safeParse(valuesWithFiles)
 
     return {
       touched: allTouched,
-      valid: allValid && !hasErrors,
-      dirty: Object.values(fieldMeta).some((m) => m?.dirty),
+      valid: result.success && !hasErrors,
+      dirty: isDirty,
     }
   })
 
@@ -170,7 +211,9 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
     const isValid = await validateForm()
 
     if (isValid && onSubmit) {
-      await onSubmit(values)
+      // Get values with File objects restored
+      const finalValues = getValuesWithFiles()
+      await onSubmit(finalValues)
     }
 
     return isValid
@@ -178,6 +221,9 @@ export function useZodForm<T extends z.ZodObject<z.ZodRawShape>>(options: UseZod
 
   // Reset form
   const resetForm = () => {
+    // Clear file storage
+    fileValues.clear()
+
     for (const key of Object.keys(initialValues as object)) {
       ;(values as Record<string, unknown>)[key] = (initialValues as Record<string, unknown>)[key]
       errors[key] = ''
