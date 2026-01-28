@@ -4,7 +4,7 @@
       class="flex items-center justify-center overflow-hidden bg-desa-foreshadow"
       :class="previewClasses"
     >
-      <img :src="previewUrl" alt="image" class="size-full object-cover" />
+      <img :src="displayPreviewUrl" alt="image" class="size-full object-cover" />
     </div>
     <div class="relative">
       <input
@@ -37,6 +37,7 @@ interface Props {
   accept?: string
   buttonText?: string
   defaultPreview?: string
+  previewUrl?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,6 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
   accept: 'image/*',
   buttonText: 'Upload',
   defaultPreview: '/src/assets/images/photos/kk-preview.png',
+  previewUrl: '',
 })
 
 const emit = defineEmits<{
@@ -52,7 +54,17 @@ const emit = defineEmits<{
 }>()
 
 const fileInput = ref<HTMLInputElement | null>(null)
-const previewUrl = ref(props.defaultPreview)
+const internalPreviewUrl = ref(props.previewUrl || props.defaultPreview)
+
+// Use internal preview if file is selected, otherwise use external previewUrl
+const displayPreviewUrl = computed(() => {
+  // If a new file is selected, show the internal preview (File object preview)
+  if (props.modelValue) {
+    return internalPreviewUrl.value
+  }
+  // Otherwise show the external previewUrl (existing image from API)
+  return props.previewUrl || internalPreviewUrl.value
+})
 
 const previewClasses = computed(() => {
   const sizeClasses = {
@@ -78,7 +90,7 @@ const handleFileChange = (event: Event) => {
   if (file) {
     const reader = new FileReader()
     reader.onload = (e) => {
-      previewUrl.value = e.target?.result as string
+      internalPreviewUrl.value = e.target?.result as string
     }
     reader.readAsDataURL(file)
   }
@@ -90,9 +102,19 @@ watch(
   () => props.modelValue,
   (newFile) => {
     if (!newFile) {
-      previewUrl.value = props.defaultPreview
+      internalPreviewUrl.value = props.previewUrl || props.defaultPreview
     }
   },
+)
+
+watch(
+  () => props.previewUrl,
+  (newUrl) => {
+    if (newUrl && !props.modelValue) {
+      internalPreviewUrl.value = newUrl
+    }
+  },
+  { immediate: true },
 )
 </script>
 

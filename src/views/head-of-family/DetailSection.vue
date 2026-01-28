@@ -2,7 +2,10 @@
   <div>
     <PageHeader
       title="Manage Kepala Rumah"
+      show-edit-button
       show-delete-button
+      :edit-button-route="`/head-of-family/${route.params.id}/edit`"
+      delete-modal-title="Hapus Kepala Keluarga"
       :breadcrumbs="breadcrumbs"
       @delete="handleDelete(headOfFamily.id)"
     />

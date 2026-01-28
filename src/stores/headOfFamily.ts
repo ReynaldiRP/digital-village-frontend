@@ -212,6 +212,102 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     }
   }
 
+  /**
+   * Update an existing head of family
+   * @param id - Head of family ID to update
+   * @param formData - Updated data for the head of family
+   *
+   * @returns Promise<void>
+   */
+  const updateHeadOfFamily = async (id: string, formData: Omit<FormHeadOfFamily, 'password'>) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const data = new FormData()
+
+      // Append all fields except password
+      data.append('name', formData.name)
+      data.append('identify_number', formData.identify_number)
+      data.append('phone_number', formData.phone_number)
+      data.append('occupation', formData.occupation)
+      data.append('birth_date', formData.birth_date)
+      data.append('gender', formData.gender)
+      data.append('marital_status', formData.marital_status)
+      data.append('email', formData.email)
+
+      // Append file only if it's a new file
+      if (formData.profile_picture instanceof File) {
+        data.append('profile_picture', formData.profile_picture)
+      }
+
+      // Use _method override for Laravel PUT request with FormData
+      data.append('_method', 'PUT')
+
+      const response = await axiosInstance.post<ApiResponse<HeadOfFamily>>(
+        `/api/head-of-families/${id}`,
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+
+      success.value = response.data.message
+      toast.success(response.data.message || 'Data berhasil diupdate.')
+      router.push({ name: 'head-of-family-manage', params: { id } })
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+
+      toast.error(errors.value.message || 'Failed to update head of family.')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * Send password reset link to head of family
+   * @param id - Head of family ID
+   *
+   * @returns Promise<void>
+   */
+  const sendPasswordReset = async (id: string) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const response = await axiosInstance.post<ApiResponse<null>>(
+        `/api/head-of-families/${id}/send-password-reset`,
+      )
+
+      success.value = response.data.message
+      toast.success(
+        response.data.message || 'Link reset password telah dikirim ke WhatsApp/Email pengguna.',
+      )
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+
+      toast.error(errors.value.message || 'Gagal mengirim link reset password.')
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     headOfFamilies,
     headOfFamily,
@@ -222,6 +318,8 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     fetchHeadOfFamilies,
     fetchHeadOfFamilyById,
     createNewHeadOfFamily,
+    updateHeadOfFamily,
+    sendPasswordReset,
     deleteHeadOfFamilyById,
   }
 })

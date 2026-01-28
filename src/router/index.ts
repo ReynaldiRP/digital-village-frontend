@@ -8,6 +8,7 @@ import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
 import CreateSection from '@/views/head-of-family/CreateSection.vue'
 import DetailSection from '@/views/head-of-family/DetailSection.vue'
+import EditSection from '@/views/head-of-family/EditSection.vue'
 import IndexSection from '@/views/head-of-family/IndexSection.vue'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -40,16 +41,22 @@ const router = createRouter({
           meta: { requiresAuth: true, permission: 'head-of-family-menu' },
         },
         {
+          path: 'head-of-family/create',
+          name: 'head-of-family-create',
+          component: () => CreateSection,
+          meta: { requiresAuth: true, permission: 'head-of-family-create' },
+        },
+        {
           path: 'head-of-family/manage/:id',
           name: 'head-of-family-manage',
           component: () => DetailSection,
           meta: { requiresAuth: true, permission: 'head-of-family-read' },
         },
         {
-          path: 'head-of-family/create',
-          name: 'head-of-family-create',
-          component: () => CreateSection,
-          meta: { requiresAuth: true, permission: 'head-of-family-create' },
+          path: 'head-of-family/:id/edit',
+          name: 'head-of-family-edit',
+          component: () => EditSection,
+          meta: { requiresAuth: true, permission: 'head-of-family-update' },
         },
       ],
     },
