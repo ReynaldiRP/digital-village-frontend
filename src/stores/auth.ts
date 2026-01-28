@@ -110,6 +110,44 @@ export const useAuthStore = defineStore('user', () => {
     success.value = ''
   }
 
+  const resetPassword = async (data: {
+    email: string
+    password: string
+    password_confirmation: string
+    token: string
+  }) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const response = await axiosInstance.post<{
+        success: boolean
+        message: string
+      }>('/api/reset-password', data)
+
+      success.value = response.data.message
+
+      // Queue toast to show after navigation
+      const toastStore = useToastStore()
+      toastStore.queueSuccess(success.value)
+
+      router.push({ name: 'login' })
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+
+      toast.error(errors.value.message || 'Gagal mereset password.')
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     loading,
     errors,
@@ -120,5 +158,6 @@ export const useAuthStore = defineStore('user', () => {
     logout,
     checkAuth,
     clearMessages,
+    resetPassword,
   }
 })

@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useToastStore } from '@/stores/toast'
 import { checkRoutePermission } from '@/helpers/routeGuard'
 import LoginSection from '@/views/auth/LoginSection.vue'
+import ResetPasswordSection from '@/views/auth/ResetPasswordSection.vue'
 import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
 import CreateSection from '@/views/head-of-family/CreateSection.vue'
@@ -69,6 +70,17 @@ const router = createRouter({
           name: 'login',
           component: LoginSection,
           meta: { requiresUnauth: true },
+        },
+      ],
+    },
+    {
+      path: '/reset-password',
+      component: AuthenticateLayout,
+      children: [
+        {
+          path: '',
+          name: 'reset-password',
+          component: ResetPasswordSection,
         },
       ],
     },

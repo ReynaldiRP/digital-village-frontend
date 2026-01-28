@@ -282,14 +282,24 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
     loading.value = true
     errors.value = {}
     try {
-      const response = await axiosInstance.post<ApiResponse<null>>(
-        `/api/head-of-families/${id}/send-password-reset`,
-      )
+      // First fetch the head of family to get their email
+      if (!headOfFamily.value || headOfFamily.value.id !== id) {
+        await fetchHeadOfFamilyById(id)
+      }
+
+      const email = headOfFamily.value?.user?.email
+
+      if (!email) {
+        throw new Error('Email tidak ditemukan untuk pengguna ini.')
+      }
+
+      // Send reset link using the email
+      const response = await axiosInstance.post<ApiResponse<null>>('/api/send-reset-link', {
+        email,
+      })
 
       success.value = response.data.message
-      toast.success(
-        response.data.message || 'Link reset password telah dikirim ke WhatsApp/Email pengguna.',
-      )
+      toast.success(response.data.message || 'Link reset password telah dikirim ke email pengguna.')
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
@@ -297,7 +307,10 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
         }
       } else {
         errors.value = {
-          message: 'Unexpected error occurred. Please try again later.',
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Unexpected error occurred. Please try again later.',
         }
       }
 
