@@ -129,7 +129,6 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
   }
 
   /**
-   * TODO: fix the upload files issue
    * Create a new head of family
    * @param formData - Data for the new head of family
    *

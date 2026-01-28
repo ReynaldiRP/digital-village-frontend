@@ -2,6 +2,7 @@ import MainLayout from '@/layouts/app/MainLayout.vue'
 import AuthenticateLayout from '@/layouts/auth/AuthenticateLayout.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useToastStore } from '@/stores/toast'
+import { checkRoutePermission } from '@/helpers/routeGuard'
 import LoginSection from '@/views/auth/LoginSection.vue'
 import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
@@ -60,7 +61,7 @@ const router = createRouter({
           path: '',
           name: 'login',
           component: LoginSection,
-          meta: { requiresUnauth: true, permission: 'dashboard-home' },
+          meta: { requiresUnauth: true },
         },
       ],
     },
@@ -68,7 +69,6 @@ const router = createRouter({
       path: '/403',
       name: 'Error 403',
       component: ErrorSection,
-      meta: { requiresAuth: true, permission: 'dashboard-home' },
     },
   ],
 })
@@ -77,6 +77,7 @@ router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
   const { user } = storeToRefs(auth)
 
+  // Handle routes that require authentication
   if (to.meta.requiresAuth) {
     if (!user.value) {
       const authenticatedUser = await auth.checkAuth()
@@ -86,14 +87,15 @@ router.beforeEach(async (to, from, next) => {
       }
     }
 
-    const userPermissions = user.value?.permissions || []
-    if (to.meta.permission && !userPermissions.includes(to.meta.permission as string)) {
+    // Check if user has permission for this route
+    if (!checkRoutePermission(to)) {
       next({ name: 'Error 403' })
       return
     }
 
     next()
   } else if (to.meta.requiresUnauth && user.value) {
+    // Redirect authenticated users away from login/register pages
     next({ name: 'dashboard' })
   } else {
     next()

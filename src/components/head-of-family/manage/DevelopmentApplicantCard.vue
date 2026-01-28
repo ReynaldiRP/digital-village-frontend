@@ -84,7 +84,6 @@ const applicantThumbnail = computed(() => {
 })
 
 const formattedDuration = computed(() => {
-  // TODO: Calculate the actual duration from the API
   // For now, using placeholder
   const duration = props.applicant.development?.duration
   return duration ? `${duration} Hari` : '-'

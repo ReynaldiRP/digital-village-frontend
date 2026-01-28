@@ -6,6 +6,7 @@ export interface SidebarItem {
     inactive: string
   }
   link: string
+  permission?: string
   children?: SidebarItem[]
 }
 
@@ -14,3 +15,5 @@ export interface ApiResponse<T> {
   message: string
   data: T
 }
+
+
