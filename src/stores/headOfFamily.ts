@@ -254,8 +254,7 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
       )
 
       success.value = response.data.message
-      toast.success(response.data.message || 'Data berhasil diupdate.')
-      router.push({ name: 'head-of-family-manage', params: { id } })
+      router.push({ name: 'head-of-family' })
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
