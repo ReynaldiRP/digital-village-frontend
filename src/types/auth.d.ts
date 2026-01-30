@@ -1,5 +1,6 @@
 export interface User {
   id: string
+  head_of_family_id?: string
   name: string
   email: string
   role: string

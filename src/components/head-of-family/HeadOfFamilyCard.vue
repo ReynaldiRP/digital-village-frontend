@@ -6,7 +6,7 @@
       </div>
       <div class="flex flex-col gap-[6px]">
         <p class="font-semibold text-lg leading-[22.5px] w-[184px] truncate">
-          {{ headOfFamily.user.name }}
+          {{ headOfFamily.name || headOfFamily.user?.name }}
         </p>
         <p class="flex items-center gap-1">
           <img
@@ -27,7 +27,9 @@
         />
         <span class="font-medium text-sm text-desa-secondary">NIK</span>
       </p>
-      <p class="font-semibold leading-5">{{ headOfFamily.identify_number }}</p>
+      <p class="font-semibold leading-5">
+        {{ headOfFamily.identity_number || headOfFamily.identify_number }}
+      </p>
     </div>
     <p
       class="flex items-center rounded-full w-[224px] shrink-0 py-[14px] px-4 gap-1 bg-desa-blue/10"

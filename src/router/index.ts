@@ -7,10 +7,13 @@ import LoginSection from '@/views/auth/LoginSection.vue'
 import ResetPasswordSection from '@/views/auth/ResetPasswordSection.vue'
 import DashboardSection from '@/views/DashboardSection.vue'
 import ErrorSection from '@/views/error/ErrorSection.vue'
-import CreateSection from '@/views/head-of-family/CreateSection.vue'
-import DetailSection from '@/views/head-of-family/DetailSection.vue'
-import EditSection from '@/views/head-of-family/EditSection.vue'
-import IndexSection from '@/views/head-of-family/IndexSection.vue'
+import {
+  HeadOfFamilyIndexSection,
+  HeadOfFamilyCreateSection,
+  HeadOfFamilyDetailSection,
+  HeadOfFamilyEditSection,
+} from '@/views/head-of-family'
+import { FamilyMemberCreateSection, FamilyMemberIndexSection } from '@/views/family-member'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -38,26 +41,38 @@ const router = createRouter({
         {
           path: 'head-of-family',
           name: 'head-of-family',
-          component: () => IndexSection,
+          component: () => HeadOfFamilyIndexSection,
           meta: { requiresAuth: true, permission: 'head-of-family-menu' },
         },
         {
           path: 'head-of-family/create',
           name: 'head-of-family-create',
-          component: () => CreateSection,
+          component: () => HeadOfFamilyCreateSection,
           meta: { requiresAuth: true, permission: 'head-of-family-create' },
         },
         {
           path: 'head-of-family/manage/:id',
           name: 'head-of-family-manage',
-          component: () => DetailSection,
+          component: () => HeadOfFamilyDetailSection,
           meta: { requiresAuth: true, permission: 'head-of-family-read' },
         },
         {
           path: 'head-of-family/:id/edit',
           name: 'head-of-family-edit',
-          component: () => EditSection,
+          component: () => HeadOfFamilyEditSection,
           meta: { requiresAuth: true, permission: 'head-of-family-update' },
+        },
+        {
+          path: 'family-member',
+          name: 'family-member',
+          component: () => FamilyMemberIndexSection,
+          meta: { requiresAuth: true, permission: 'family-member-menu' },
+        },
+        {
+          path: 'family-member/create',
+          name: 'family-member-create',
+          component: () => FamilyMemberCreateSection,
+          meta: { requiresAuth: true, permission: 'family-member-create' },
         },
       ],
     },

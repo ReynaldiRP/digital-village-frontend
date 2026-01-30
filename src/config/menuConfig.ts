@@ -22,7 +22,7 @@ export const menuConfig: MenuConfig[] = [
       inactive: chartSquareSecondaryGreen,
     },
     link: '/',
-    permission: 'dashboard-menu', // Added to match router permission
+    // Added to match router permission
   },
   {
     id: 2,
@@ -41,7 +41,7 @@ export const menuConfig: MenuConfig[] = [
       active: crownDarkGreen,
       inactive: crownSecondaryGreen,
     },
-    link: '/family-members',
+    link: '/family-member',
     permission: 'family-member-menu',
   },
   {

@@ -304,7 +304,7 @@ onMounted(async () => {
     // Pre-fill form with existing data
     if (headOfFamilyData.value) {
       // Use setFieldValue for each field
-      setFieldValue('name', headOfFamilyData.value.user.name || '')
+      setFieldValue('name', headOfFamilyData.value.name || headOfFamilyData.value.user?.name || '')
       setFieldValue('identify_number', headOfFamilyData.value.identify_number?.toString() || '')
       setFieldValue('phone_number', headOfFamilyData.value.phone_number || '')
       setFieldValue('occupation', headOfFamilyData.value.occupation || '')

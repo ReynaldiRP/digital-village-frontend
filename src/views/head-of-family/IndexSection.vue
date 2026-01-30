@@ -3,7 +3,7 @@
     <PageHeader
       title="Kepala Rumah"
       show-add-button
-      add-button-text="Add New"
+      add-button-text="Tambah Baru"
       add-button-route="head-of-family/create"
     />
 

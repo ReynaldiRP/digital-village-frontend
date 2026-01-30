@@ -8,37 +8,44 @@ export interface User {
   email: string
 }
 
-export interface FamilyMember {
+/**
+ * Base member interface with common fields
+ */
+interface BaseMember {
   id: string
-  user: User
-  profile_picture: string
-  identify_number: number
-  gender: 'male' | 'female'
-  birth_date: string
-  age: number
-  phone_number: string
+  name: string
   occupation: string
-  marital_status: 'single' | 'married' | 'divorced' | 'widowed'
+  identity_number: number
+  age: number
+  profile_picture?: string
+}
+
+/**
+ * Family member with relation field
+ */
+export interface FamilyMember extends BaseMember {
   relation: string
 }
 
-export interface HeadOfFamily {
-  id: string
-  user: User
-  identify_number: number
-  gender: 'male' | 'female'
-  birth_date: string
-  age: number
-  phone_number: string
-  occupation: string
-  profile_picture: string
-  marital_status: 'single' | 'married' | 'divorced' | 'widowed'
-  created_at: string
-  family_members_count: number
-  family_members: FamilyMember[]
-  social_assistances: SocialAssistance[]
-  events: EventParticipation[]
-  development_applicants: DevelopmentApplicant[]
+/**
+ * Head of family response from API
+ */
+export interface HeadOfFamily extends BaseMember {
+  email?: string
+  gender?: 'male' | 'female'
+  birth_date?: string
+  phone_number?: string
+  profile_picture?: string
+  marital_status?: 'single' | 'married' | 'divorced' | 'widowed'
+  created_at?: string
+  family_members_count?: number
+  family_members?: FamilyMember[]
+  social_assistances?: SocialAssistance[]
+  events?: EventParticipation[]
+  development_applicants?: DevelopmentApplicant[]
+  // Legacy fields for backward compatibility
+  user?: User
+  identify_number?: number
 }
 
 export interface MetaData {
