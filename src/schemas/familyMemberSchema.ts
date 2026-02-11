@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/auth'
 import { z } from 'zod'
 
 // Custom toTypedSchema for Zod v4 + VeeValidate integration
@@ -26,6 +27,7 @@ export const toTypedSchema = <T extends z.ZodType>(zodSchema: T) => {
 }
 
 export const familyMemberFormSchema = z.object({
+  head_of_family_id: z.string().optional(),
   profile_picture: z
     .instanceof(File)
     .nullable()
@@ -67,10 +69,7 @@ export const familyMemberFormSchema = z.object({
       return age >= 1
     }, 'Usia minimal 1 tahun'),
   marital_status: z.enum(['single', 'married'], 'Status wajib dipilih'),
-  relation_to_head: z.enum(
-    ['wife', 'husband', 'child'],
-    'Hubungan dengan kepala keluarga wajib dipilih',
-  ),
+  relation: z.enum(['wife', 'husband', 'child'], 'Hubungan dengan kepala keluarga wajib dipilih'),
   phone_number: z
     .string()
     .min(1, 'Nomor HP wajib diisi')
@@ -78,21 +77,28 @@ export const familyMemberFormSchema = z.object({
     .max(15, 'Nomor HP maksimal 15 digit')
     .regex(/^(\+62|62|0)8[1-9][0-9]{6,10}$/, 'Format nomor HP tidak valid'),
   email: z.string().min(1, 'Email wajib diisi').email('Format email tidak valid'),
+  password: z.string().optional(),
 })
 
 export const familyMemberValidationSchema = toTypedSchema(familyMemberFormSchema)
 
 export type FamilyMemberFormData = z.infer<typeof familyMemberFormSchema>
 
-export const familyMemberInitialValues: FamilyMemberFormData = {
-  profile_picture: null,
-  gender: 'male',
-  name: '',
-  identify_number: '',
-  occupation: '',
-  birth_date: '',
-  marital_status: 'single',
-  relation_to_head: 'child',
-  phone_number: '',
-  email: '',
+export const getFamilyMemberInitialValues = (): FamilyMemberFormData => {
+  const auth = useAuthStore()
+
+  return {
+    head_of_family_id: auth.user?.head_of_family_id || 'tidak ada data',
+    profile_picture: null,
+    gender: 'male',
+    name: '',
+    identify_number: '',
+    occupation: '',
+    birth_date: '',
+    marital_status: 'single',
+    relation: 'child',
+    phone_number: '',
+    email: '',
+    password: 'password',
+  }
 }

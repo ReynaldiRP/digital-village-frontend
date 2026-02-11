@@ -49,12 +49,15 @@
         alt="icon"
       />
     </label>
-    <span
-      v-if="errorMessage && validationState === 'invalid'"
-      class="font-medium text-sm text-desa-red"
-    >
-      {{ errorMessage }}
-    </span>
+    <section class="flex">
+      <span
+        v-if="errorMessage && validationState === 'invalid'"
+        class="font-medium text-sm text-desa-red"
+      >
+        {{ errorMessage }}
+      </span>
+      <small v-if="showCounter" class="ml-auto">{{ currentLength }}/{{ maxLength }}</small>
+    </section>
   </div>
 </template>
 
@@ -62,7 +65,6 @@
 import { computed } from 'vue'
 import ChecklistDarkGreenFillIcon from '@/assets/images/icons/Checklist-dark-green-fill.svg'
 import CloseCircleRedFillIcon from '@/assets/images/icons/close-circle-red-fill.svg'
-
 
 interface Props {
   modelValue: string | number
@@ -73,6 +75,9 @@ interface Props {
   iconError?: string
   validationState?: 'valid' | 'invalid' | 'default'
   errorMessage?: string
+  showCounter?: boolean
+  maxLength?: number
+  numericOnly?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -80,6 +85,8 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   validationState: 'default',
   errorMessage: '',
+  showCounter: false,
+  numericOnly: false,
 })
 
 const emit = defineEmits<{
@@ -108,9 +115,23 @@ const inputClasses = computed(() => {
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
-  const value = props.type === 'number' ? Number(target.value) : target.value
-  emit('update:modelValue', value)
+  let value = target.value
+
+  if (props.numericOnly) {
+    value = value.replace(/\D/g, '')
+  }
+
+  if (props.maxLength) {
+    value = value.slice(0, props.maxLength)
+  }
+
+  target.value = value
+
+  const finalValue = props.type === 'number' ? Number(value) : value
+  emit('update:modelValue', finalValue)
 }
+
+const currentLength = computed(() => String(props.modelValue ?? '').length)
 </script>
 
 <style scoped>

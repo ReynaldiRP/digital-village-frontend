@@ -70,8 +70,21 @@ export interface FormHeadOfFamily {
   identify_number: string
   phone_number: string
   occupation: string
-  birth_date: date
+  birth_date: string
   gender: 'male' | 'female'
   marital_status: 'single' | 'married'
   profile_picture?: File | null
+}
+
+export interface formFamilyMember {
+  name: string
+  email: string
+  phone_number: string
+  birth_date: string
+  identify_number: string
+  occupation: string
+  relation: string
+  profile_picture?: File | null
+  relation: 'wife' | 'husband' | 'child'
+  marital_status: 'single' | 'married'
 }

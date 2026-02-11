@@ -141,15 +141,11 @@ export const useHeadOfFamilyStore = defineStore('headOfFamily', () => {
       const data = new FormData()
 
       // Append all fields
-      data.append('name', formData.name)
-      data.append('identify_number', formData.identify_number)
-      data.append('phone_number', formData.phone_number)
-      data.append('occupation', formData.occupation)
-      data.append('birth_date', formData.birth_date)
-      data.append('gender', formData.gender)
-      data.append('marital_status', formData.marital_status)
-      data.append('email', formData.email)
-      data.append('password', formData.password)
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          data.append(key, value)
+        }
+      })
 
       // Append file only if it exists
       if (formData.profile_picture instanceof File) {

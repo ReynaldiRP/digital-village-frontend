@@ -7,7 +7,7 @@
         { label: 'Tambah Anggota Keluarga Baru', route: `/family-member/create` },
       ]"
     />
-    <form class="capitalize mt-4" enctype="multipart/form-data">
+    <form class="capitalize mt-4" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <section class="shrink-0 rounded-3xl p-6 bg-white flex flex-col gap-6 h-fit">
         <!-- Photo Profile -->
         <BaseFormSection label="Profile Anggota Keluarga" direction="row">
@@ -48,12 +48,15 @@
           <BaseFormInput
             v-model="form.identify_number"
             type="text"
+            numeric-only
             placeholder="Ketik NIK"
             :icon-inactive="icons.KeyboardSecondaryGreenIcon"
             :icon-active="icons.KeyboardBlackIcon"
             :validation-state="getFieldValidationState('identify_number')"
             :error-message="errors.identify_number"
             @blur="handleBlur('identify_number')"
+            show-counter
+            :max-length="16"
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
@@ -99,11 +102,7 @@
 
         <!-- Hubungan Dengan Kepala Keluarga -->
         <BaseFormSection label="Hubungan Dengan Kepala Keluarga" direction="row">
-          <BaseFormRadioGroup
-            v-model="form.relation_to_head"
-            name="relation"
-            :options="relationOptions"
-          />
+          <BaseFormRadioGroup v-model="form.relation" name="relation" :options="relationOptions" />
         </BaseFormSection>
         <hr class="border-desa-background" />
 
@@ -137,6 +136,24 @@
           />
         </BaseFormSection>
         <hr class="border-desa-background" />
+
+        <!-- Buttons -->
+        <section id="Buttons" class="flex items-center justify-end gap-4">
+          <router-link to="/head-of-family">
+            <div
+              class="py-[18px] rounded-2xl bg-desa-red w-[180px] text-center flex justify-center font-medium text-white"
+            >
+              Batal, Tidak jadi
+            </div>
+          </router-link>
+          <button
+            :disabled="!meta.valid"
+            type="submit"
+            class="py-[18px] rounded-2xl disabled:bg-desa-grey w-[180px] text-center flex justify-center font-medium text-white bg-desa-dark-green transition-all duration-300"
+          >
+            Create Now
+          </button>
+        </section>
       </section>
     </form>
   </div>
@@ -148,22 +165,28 @@ import BaseFormFileUpload from '@/components/form/BaseFormFileUpload.vue'
 import BaseFormRadioGroup, { type RadioOption } from '@/components/form/BaseFormRadioGroup.vue'
 import BaseFormSection from '@/components/form/BaseFormSection.vue'
 import { useZodForm } from '@/composables/useZodForm'
-import { familyMemberFormSchema, familyMemberInitialValues } from '@/schemas/familyMemberSchema'
+import { familyMemberFormSchema, getFamilyMemberInitialValues } from '@/schemas/familyMemberSchema'
 import { icons } from '@/assets/icons'
 import BaseFormInput from '@/components/form/BaseFormInput.vue'
 import BaseFormDateInput from '@/components/form/BaseFormDateInput.vue'
+import { useFamilyMemberStore } from '@/stores/familyMember'
+
+const familyMember = useFamilyMemberStore()
 
 const {
   values: form,
   errors,
+  meta,
   handleBlur,
   setFieldValue,
   getFieldValidationState,
+  handleSubmit,
 } = useZodForm({
   schema: familyMemberFormSchema,
-  initialValues: familyMemberInitialValues,
-  onSubmit: (values) => {
-    console.log('Form submitted with values:', values)
+  initialValues: getFamilyMemberInitialValues(),
+  onSubmit: async (values) => {
+    console.log('Form Values:', values)
+    await familyMember.createFamilyMember(values)
   },
 })
 
