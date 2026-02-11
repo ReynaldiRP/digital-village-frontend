@@ -28,8 +28,8 @@
             v-model="form.name"
             type="text"
             placeholder="Masukan nama lengkap"
-            :icon-inactive="UserSecondaryGreenIcon"
-            :icon-active="UserBlackIcon"
+            :icon-inactive="icons.UserSecondaryGreenIcon"
+            :icon-active="icons.UserBlackIcon"
             :validation-state="getFieldValidationState('name')"
             :error-message="errors.name"
             @blur="handleBlur('name')"
@@ -43,8 +43,8 @@
             v-model="form.identify_number"
             type="text"
             placeholder="Ketik NIK"
-            :icon-inactive="KeyboardSecondaryGreenIcon"
-            :icon-active="KeyboardBlackIcon"
+            :icon-inactive="icons.KeyboardSecondaryGreenIcon"
+            :icon-active="icons.KeyboardBlackIcon"
             :validation-state="getFieldValidationState('identify_number')"
             :error-message="errors.identify_number"
             @blur="handleBlur('identify_number')"
@@ -58,8 +58,8 @@
             v-model="form.phone_number"
             type="tel"
             placeholder="Masukan No. HP yang aktif"
-            :icon-inactive="CallSecondaryGreenIcon"
-            :icon-active="CallBlackIcon"
+            :icon-inactive="icons.CallSecondaryGreenIcon"
+            :icon-active="icons.CallBlackIcon"
             :validation-state="getFieldValidationState('phone_number')"
             :error-message="errors.phone_number"
             @blur="handleBlur('phone_number')"
@@ -73,8 +73,8 @@
             v-model="form.occupation"
             type="text"
             placeholder="Masukan nama pekerjaan"
-            :icon-inactive="BriefcaseSecondaryGreenIcon"
-            :icon-active="BriefcaseBlackIcon"
+            :icon-inactive="icons.BriefcaseSecondaryGreenIcon"
+            :icon-active="icons.BriefcaseBlackIcon"
             :validation-state="getFieldValidationState('occupation')"
             :error-message="errors.occupation"
             @blur="handleBlur('occupation')"
@@ -120,9 +120,9 @@
             v-model="form.email"
             type="email"
             placeholder="Masukan Email"
-            :icon-inactive="SmsSecondaryGreenIcon"
-            :icon-active="SmsBlackIcon"
-            :icon-error="SmsRedIcon"
+            :icon-inactive="icons.SmsSecondaryGreenIcon"
+            :icon-active="icons.SmsBlackIcon"
+            :icon-error="icons.SmsRedIcon"
             :validation-state="getFieldValidationState('email')"
             :error-message="errors.email"
             @blur="handleBlur('email')"
@@ -136,9 +136,9 @@
             v-model="form.password"
             type="password"
             placeholder="Masukan Password"
-            :icon-inactive="KeySecondaryGreenIcon"
-            :icon-active="KeyBlackIcon"
-            :icon-error="KeySecondaryGreenIcon"
+            :icon-inactive="icons.KeySecondaryGreenIcon"
+            :icon-active="icons.KeyBlackIcon"
+            :icon-error="icons.KeySecondaryGreenIcon"
             :validation-state="getFieldValidationState('password')"
             :error-message="errors.password"
             @blur="handleBlur('password')"
@@ -169,6 +169,7 @@
 </template>
 
 <script setup lang="ts">
+import { icons } from '@/assets/icons'
 import PageHeader from '@/components/common/PageHeader.vue'
 import {
   BaseFormSection,
@@ -180,29 +181,6 @@ import {
 } from '@/components/form'
 import { useZodForm } from '@/composables/useZodForm'
 import { headOfFamilyFormSchema, headOfFamilyInitialValues } from '@/schemas'
-
-// Icons
-import UserSecondaryGreenIcon from '@/assets/images/icons/user-secondary-green.svg'
-import UserBlackIcon from '@/assets/images/icons/user-black.svg'
-import KeyboardSecondaryGreenIcon from '@/assets/images/icons/keyboard-secondary-green.svg'
-import KeyboardBlackIcon from '@/assets/images/icons/keyboard-black.svg'
-import CallSecondaryGreenIcon from '@/assets/images/icons/call-secondary-green.svg'
-import CallBlackIcon from '@/assets/images/icons/call-black.svg'
-import BriefcaseSecondaryGreenIcon from '@/assets/images/icons/briefcase-secondary-green.svg'
-import BriefcaseBlackIcon from '@/assets/images/icons/briefcase-black.svg'
-import SmsSecondaryGreenIcon from '@/assets/images/icons/sms-secondary-green.svg'
-import SmsBlackIcon from '@/assets/images/icons/sms-black.svg'
-import SmsRedIcon from '@/assets/images/icons/sms-red.svg'
-import KeySecondaryGreenIcon from '@/assets/images/icons/key-secondary-green.svg'
-import KeyBlackIcon from '@/assets/images/icons/key-black.svg'
-import ManSecondaryGreenIcon from '@/assets/images/icons/man-secondary-green.svg'
-import ManDarkGreenIcon from '@/assets/images/icons/man-dark-green.svg'
-import WomanSecondaryGreenIcon from '@/assets/images/icons/woman-secondary-green.svg'
-import WomanDarkGreenIcon from '@/assets/images/icons/woman-dark-green.svg'
-import ProfileSecondaryGreenIcon from '@/assets/images/icons/profile-secondary-green.svg'
-import ProfileDarkGreenIcon from '@/assets/images/icons/profile-dark-green.svg'
-import Profile2userSecondaryGreenIcon from '@/assets/images/icons/profile-2user-secondary-green.svg'
-import Profile2userDarkGreenIcon from '@/assets/images/icons/profile-2user-dark-green.svg'
 import { useHeadOfFamilyStore } from '@/stores/headOfFamily'
 
 const headOfFamily = useHeadOfFamilyStore()
@@ -230,14 +208,14 @@ const genderOptions: RadioOption[] = [
   {
     label: 'Pria',
     value: 'male',
-    iconInactive: ManSecondaryGreenIcon,
-    iconActive: ManDarkGreenIcon,
+    iconInactive: icons.ManSecondaryGreenIcon,
+    iconActive: icons.ManDarkGreenIcon,
   },
   {
     label: 'Wanita',
     value: 'female',
-    iconInactive: WomanSecondaryGreenIcon,
-    iconActive: WomanDarkGreenIcon,
+    iconInactive: icons.WomanSecondaryGreenIcon,
+    iconActive: icons.WomanDarkGreenIcon,
   },
 ]
 
@@ -245,14 +223,14 @@ const maritalStatusOptions: RadioOption[] = [
   {
     label: 'Belum Menikah',
     value: 'single',
-    iconInactive: ProfileSecondaryGreenIcon,
-    iconActive: ProfileDarkGreenIcon,
+    iconInactive: icons.ProfileSecondaryGreenIcon,
+    iconActive: icons.ProfileDarkGreenIcon,
   },
   {
     label: 'Sudah Menikah',
     value: 'married',
-    iconInactive: Profile2userSecondaryGreenIcon,
-    iconActive: Profile2userDarkGreenIcon,
+    iconInactive: icons.Profile2userSecondaryGreenIcon,
+    iconActive: icons.Profile2userDarkGreenIcon,
   },
 ]
 </script>

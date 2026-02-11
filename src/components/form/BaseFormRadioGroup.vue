@@ -18,7 +18,7 @@
       >
         {{ option.label }}
       </span>
-      <div class="flex size-6 shrink-0">
+      <div v-show="option.iconActive && option.iconInactive" class="flex size-6 shrink-0">
         <img
           :src="option.iconInactive"
           class="size-6 flex group-has-[:checked]:hidden"
@@ -34,8 +34,8 @@
 export interface RadioOption {
   label: string
   value: string
-  iconInactive: string
-  iconActive: string
+  iconInactive?: string
+  iconActive?: string
 }
 
 interface Props {
