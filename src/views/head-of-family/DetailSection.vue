@@ -13,7 +13,7 @@
     <div v-else-if="headOfFamily" class="flex gap-[14px] mt-4">
       <div class="flex flex-col w-[calc(525/1000*100%)] shrink-0 gap-[14px]">
         <DetailHeadOfFamily :head-of-family="headOfFamily" />
-        <DetailFamilyMember :family-members="headOfFamily.family_members" />
+        <DetailFamilyMember :family-members="headOfFamily.family_members || []" />
       </div>
       <div class="flex flex-col flex-1 shrink-0 gap-[14px]">
         <section id="Recent-Activity" class="flex flex-col rounded-3xl p-6 gap-6 bg-white">

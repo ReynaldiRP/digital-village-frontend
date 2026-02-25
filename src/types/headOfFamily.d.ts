@@ -15,7 +15,7 @@ interface BaseMember {
   id: string
   name: string
   occupation: string
-  identity_number: number
+  identify_number: number
   age: number
   profile_picture?: string
 }
@@ -25,6 +25,7 @@ interface BaseMember {
  */
 export interface FamilyMember extends BaseMember {
   relation: string
+  user?: User
 }
 
 /**

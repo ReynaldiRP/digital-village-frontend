@@ -13,7 +13,11 @@ import {
   HeadOfFamilyDetailSection,
   HeadOfFamilyEditSection,
 } from '@/views/head-of-family'
-import { FamilyMemberCreateSection, FamilyMemberIndexSection } from '@/views/family-member'
+import {
+  FamilyMemberCreateSection,
+  FamilyMemberDetailSection,
+  FamilyMemberIndexSection,
+} from '@/views/family-member'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -67,6 +71,12 @@ const router = createRouter({
           name: 'family-member',
           component: () => FamilyMemberIndexSection,
           meta: { requiresAuth: true, permission: 'family-member-menu' },
+        },
+        {
+          path: 'family-member/manage/:id',
+          name: 'family-member-manage',
+          component: () => FamilyMemberDetailSection,
+          meta: { requiresAuth: true, permission: 'family-member-read' },
         },
         {
           path: 'family-member/create',

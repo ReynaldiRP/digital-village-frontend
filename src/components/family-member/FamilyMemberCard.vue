@@ -55,9 +55,13 @@
           </div>
           <p class="font-semibold leading-5">{{ member.age }} Tahun</p>
         </div>
-        <div class="rounded-2xl px-6 py-[18px] bg-desa-black font-medium leading-5 text-white">
+        <router-link
+          v-show="!isHeadOfFamily"
+          :to="{ name: 'family-member-manage', params: { id: member.id } }"
+          class="rounded-2xl px-6 py-[18px] bg-desa-black font-medium leading-5 text-white"
+        >
           Manage
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -65,15 +69,20 @@
 
 <script setup lang="ts">
 import type { FamilyMember, HeadOfFamily } from '@/types/headOfFamily'
+import { computed } from 'vue'
 
 interface Props {
   cardTitle: string
   familyMembers: (FamilyMember | HeadOfFamily)[]
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   cardTitle: 'Anggota Keluarga',
   familyMembers: () => [],
+})
+
+const isHeadOfFamily = computed(() => {
+  return props.familyMembers.some((member) => !('relation' in member))
 })
 </script>
 

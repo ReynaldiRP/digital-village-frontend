@@ -7,9 +7,11 @@ import { handleError } from '../helpers/errorHelper'
 import { ref } from 'vue'
 import { useAuthStore } from './auth'
 import router from '@/router'
+import { toast } from 'vue3-toastify'
 
 export const useFamilyMemberStore = defineStore('familyMember', () => {
   const headOfFamily = ref<HeadOfFamily | null>(null)
+  const familyMember = ref<FamilyMember | null>(null)
   const loading = ref(false)
   const success = ref<string>('')
   const errors = ref<Record<string, string>>({})
@@ -31,6 +33,62 @@ export const useFamilyMemberStore = defineStore('familyMember', () => {
 
       const data = response.data.data
       headOfFamily.value = Array.isArray(data) ? (data[0] ?? null) : data
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * Fetch family member by ID
+   * @param id - ID of the family member
+   * @returns Promise<void>
+   */
+  const fetchFamilyMemberById = async (id: string) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const response = await axiosInstance.get<ApiResponse<FamilyMember>>(
+        `/api/family-members/${id}`,
+      )
+
+      familyMember.value = response.data.data
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        errors.value = {
+          message: handleError(error.response),
+        }
+      } else {
+        errors.value = {
+          message: 'Unexpected error occurred. Please try again later.',
+        }
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * Delete a family member by ID
+   * @param id - Family member ID to delete
+   * @returns Promise<void>
+   */
+  const deleteFamilyMemberById = async (id: string) => {
+    loading.value = true
+    errors.value = {}
+    try {
+      const response = await axiosInstance.delete<ApiResponse<null>>(`/api/family-members/${id}`)
+      success.value = response.data.message
+      router.push({ name: 'family-member' })
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         errors.value = {
@@ -82,6 +140,8 @@ export const useFamilyMemberStore = defineStore('familyMember', () => {
           message: 'Unexpected error occurred. Please try again later.',
         }
       }
+
+      toast.error(errors.value.message)
     } finally {
       loading.value = false
     }
@@ -89,10 +149,13 @@ export const useFamilyMemberStore = defineStore('familyMember', () => {
 
   return {
     headOfFamily,
+    familyMember,
     loading,
     success,
     errors,
     fetchFamilyMembers,
+    fetchFamilyMemberById,
     createFamilyMember,
+    deleteFamilyMemberById,
   }
 })
